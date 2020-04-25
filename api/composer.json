@@ -60,6 +60,9 @@
         "symfony/symfony": "*"
     },
     "require-dev": {
+        "behat/behat": "^3.6",
+        "behat/mink": "^1.8",
+        "behat/symfony2-extension": "dev-master",
         "doctrine/coding-standard": "^7.0.2",
         "ergebnis/composer-normalize": "^2.3.2",
         "maglnet/composer-require-checker": "^2.1.0",
@@ -112,5 +115,11 @@
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/uirapuru/Symfony2Extension"
+        }
+    ]
 }
