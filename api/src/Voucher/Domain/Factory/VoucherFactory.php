@@ -1,45 +1,30 @@
 <?php
 
-namespace App\Voucher\Factory;
+namespace App\Voucher\Domain\Factory;
 
 use App\Common\ValueObject\Price;
 use App\Entry\Entity\Entry;
-use App\Voucher\Entity\Voucher;
+use App\Voucher\Domain\Model\Voucher;
 use DateTimeImmutable;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
 class VoucherFactory
 {
-    /**
-     * @var UuidInterface
-     */
-    private $id;
+    private UuidInterface $id;
 
-    /**
-     * @var DateTimeImmutable
-     */
-    private $startDate;
+    private ?DateTimeImmutable $startDate;
 
-    /**
-     * @var DateTimeImmutable
-     */
-    private $endDate;
+    private ?DateTimeImmutable $endDate;
 
-    /**
-     * @var integer
-     */
-    private $maximumAmount;
+    private ?int $maximumAmount;
 
-    /**
-     * @var Price
-     */
-    private $price;
+    private Price $price;
 
     /**
      * @var Entry[]
      */
-    private $entries;
+    private iterable $entries;
 
     public static function create() : self
     {

@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Behat" type="PhpBehatConfigurationType">
+    <BehatRunner scenario="" scope="Yml" />
+    <CommandLine>
+      <PhpTestInterpreterSettings>
+        <option name="interpreterName" value="PHP 7.4" />
+      </PhpTestInterpreterSettings>
+      <envs>
+        <env name="APP_ENV" value="test" />
+      </envs>
+    </CommandLine>
+    <method v="2" />
+  </configuration>
+</component>

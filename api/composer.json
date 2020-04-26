@@ -70,6 +70,7 @@
         "behat/mink-extension": "dev-master",
         "behatch/contexts": "^3.3",
         "doctrine/coding-standard": "^7.0.2",
+        "doctrine/doctrine-fixtures-bundle": "^3.3",
         "ergebnis/composer-normalize": "^2.3.2",
         "friends-of-behat/symfony-extension": "^2.0",
         "maglnet/composer-require-checker": "^2.1.0",

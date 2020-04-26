@@ -1,26 +1,18 @@
+imports:
+  - ./src/Core/Infrastructure/Behat/Resources/config/suites.yaml
+
 default:
     formatters:
       pretty:
         verbose:  true
         paths:    false
         snippets: false
-        
-    suites:
-        default:
-            contexts:
-#                - FeatureContext:
-#                    kernel: '@kernel'
-                - Behat\MinkExtension\Context\MinkContext
-                - behatch:context:json
-                - behatch:context:rest
+
     extensions:
         FriendsOfBehat\SymfonyExtension:
-          bootstrap: ~
           kernel:
-            class: ~
-            path: ~
-            environment: ~
-            debug: ~
+            environment: test
+            debug: true
         Behatch\Extension: ~
         Behat\MinkExtension:
           sessions:

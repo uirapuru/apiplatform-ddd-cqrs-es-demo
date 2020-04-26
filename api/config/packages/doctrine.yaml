@@ -1,14 +1,57 @@
 doctrine:
     dbal:
-        url: '%env(resolve:DATABASE_URL)%'
+#        types:
+#            meal_type: App\Core\Doctrine\Types\MealTypeType
+        
+        default_connection: default
+        
+        connections:
+            default:
+                url: '%env(resolve:DATABASE_URL)%'
+                driver: 'pdo_mysql'
+                server_version: '5.7'
+                charset: utf8mb4
+                default_table_options:
+                    charset: utf8mb4
+                    collate: utf8mb4_unicode_ci
+                schema_filter: '~^(?!messenger_messages)~'
+    
+#            tenant:
+#                driver: 'pdo_mysql'
+#                server_version: '5.7'
+#                charset: utf8mb4
+#                wrapper_class: App\Core\Tenancy\Database\DBAL\TenantConnectionWrapper
+#                default_table_options:
+#                    charset: utf8mb4
+#                    collate: utf8mb4_unicode_ci
+
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         mappings:
-            Book:
+            Voucher:
                 is_bundle: false
-                type: annotation
-                dir: '%kernel.project_dir%/src/Book/Infrastructure/Projection/Doctrine/Orm/Entity'
-                prefix: 'App\Book\Infrastructure\Projection\Doctrine\Orm\Entity'
-                alias: Book
+                type: xml
+                dir: '%kernel.project_dir%/src/Voucher/Resources/config/doctrine'
+                prefix: 'App\Voucher\Domain\Model'
+                alias: Voucher
+            User:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/src/User/Resources/config/doctrine'
+                prefix: 'App\User\Domain\Model'
+                alias: User
+            Payment:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/src/Payment/Resources/config/doctrine'
+                prefix: 'App\Payment\Domain\Model'
+                alias: Payment
+                
+#            Book:
+#                is_bundle: false
+#                type: annotation
+#                dir: '%kernel.project_dir%/src/Book/Infrastructure/Projection/Doctrine/Orm/Entity'
+#                prefix: 'App\Book\Infrastructure\Projection\Doctrine\Orm\Entity'
+#                alias: Book

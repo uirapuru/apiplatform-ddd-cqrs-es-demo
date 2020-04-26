@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Voucher\Entity;
+namespace App\Voucher\Domain\Model;
 
 use App\Common\Traits\Timestampable;
 use App\Common\Traits\UuidTrait;
 use App\Common\ValueObject\Price;
 use App\Entry\Entity\Entry;
 use DateTimeImmutable;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Webmozart\Assert\Assert;
 
@@ -14,43 +15,28 @@ class Voucher
 {
     use UuidTrait, Timestampable;
 
-    /**
-     * @var DateTimeImmutable
-     */
-    private $startDate;
+    private ?DateTimeImmutable $startDate;
 
-    /**
-     * @var DateTimeImmutable
-     */
-    private $endDate;
+    private ?DateTimeImmutable $endDate;
 
-    /**
-     * @var integer
-     */
-    private $maximumAmount;
+    private ?int $maximumAmount;
 
-    /**
-     * @var Price
-     */
-    private $price;
+    private ?Price $price;
 
     /**
      * @var Entry[]
      */
-    private $entries;
+    private iterable $entries = [];
 
-    /**
-     * @var DateTimeImmutable $deletedAt
-     */
-    private $closedAt;
+    private DateTimeImmutable $closedAt;
 
-    public function __construct(UuidInterface $id, DateTimeImmutable $startDate, ?DateTimeImmutable $endDate, ?Price $price, ?int $maximumAmount, ?iterable $entries)
+    public function __construct(UuidInterface $id, ?DateTimeImmutable $startDate, ?DateTimeImmutable $endDate, ?Price $price, ?int $maximumAmount, iterable $entries = [])
     {
-        if($endDate) {
+        if($endDate && $startDate) {
             Assert::lessThanEq($startDate->getTimestamp(), $endDate->getTimestamp());
         }
 
-        $this->id = $id;
+        $this->id = $id ?? Uuid::uuid4();
         $this->startDate = $startDate;
         $this->endDate = $endDate;
         $this->price = $price;
