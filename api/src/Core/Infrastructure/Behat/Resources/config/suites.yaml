@@ -1,0 +1,2 @@
+imports:
+  - suites/domain/cart/shopping_cart.yml

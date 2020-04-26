@@ -40,10 +40,14 @@
         "symfony/http-kernel": "~5.0.7",
         "symfony/messenger": "~5.0.7",
         "symfony/routing": "~5.0.7",
+        "symfony/security-core": "5.0.*",
+        "symfony/security-guard": "5.0.*",
+        "symfony/security-http": "5.0.*",
         "symfony/serializer": "~5.0.7",
         "symfony/twig-bundle": "~5.0.7",
         "symfony/validator": "~5.0.7",
         "symfony/yaml": "~5.0.7",
+        "tattali/calendar-bundle": "^1.2",
         "webmozart/assert": "^1.8.0"
     },
     "replace": {
@@ -62,9 +66,12 @@
     "require-dev": {
         "behat/behat": "^3.6",
         "behat/mink": "^1.8",
-        "behat/symfony2-extension": "dev-master",
+        "behat/mink-browserkit-driver": "dev-master",
+        "behat/mink-extension": "dev-master",
+        "behatch/contexts": "^3.3",
         "doctrine/coding-standard": "^7.0.2",
         "ergebnis/composer-normalize": "^2.3.2",
+        "friends-of-behat/symfony-extension": "^2.0",
         "maglnet/composer-require-checker": "^2.1.0",
         "nelmio/alice": "^3.6.0",
         "phpstan/extension-installer": "^1.0.4",
@@ -75,6 +82,7 @@
         "phpstan/phpstan-webmozart-assert": "^0.12.3",
         "phpunit/phpunit": "^9.1.3",
         "psalm/plugin-phpunit": "^0.10.0",
+        "roave/security-advisories": "dev-master",
         "symfony/finder": "~5.0.4",
         "symfony/stopwatch": "~5.0.7",
         "symfony/web-profiler-bundle": "~5.0.7",
@@ -85,7 +93,8 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "bin-dir": "bin"
     },
     "extra": {
         "symfony": {
@@ -120,6 +129,14 @@
         {
             "type": "vcs",
             "url": "https://github.com/uirapuru/Symfony2Extension"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/uirapuru/MinkBrowserKitDriver"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/uirapuru/MinkExtension"
         }
     ]
 }

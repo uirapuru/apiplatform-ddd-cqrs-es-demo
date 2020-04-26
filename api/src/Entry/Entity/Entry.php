@@ -15,30 +15,15 @@ class Entry
 {
     use UuidTrait, Timestampable;
 
-    /**
-     * @var DateTimeImmutable
-     */
-    protected $startDate;
+    protected DateTimeImmutable $startDate;
 
-    /**
-     * @var DateTimeImmutable
-     */
-    protected $endDate;
+    protected DateTimeImmutable $endDate;
 
-    /**
-     * @var Price $price
-     */
-    protected $price;
+    protected ?Price $price;
 
-    /**
-     * @var EntryType
-     */
-    protected $type;
+    protected EntryType $type;
 
-    /**
-     * @var Voucher
-     */
-    protected $voucher;
+    protected ?Voucher $voucher;
 
     public function __construct(UuidInterface $id, DateTimeImmutable $startDate, DateTimeImmutable $endDate, EntryType $type, ?Price $price, ?Voucher $voucher)
     {

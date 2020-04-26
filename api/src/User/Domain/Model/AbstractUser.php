@@ -1,6 +1,6 @@
 <?php
 
-namespace App\User\Entity;
+namespace App\User\Domain\Model;
 
 use App\Common\Traits\Timestampable;
 use App\Common\Traits\UuidTrait;
@@ -12,6 +12,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 abstract class AbstractUser implements UserInterface
 {
     use UuidTrait, Timestampable;
+
+    protected $username;
+    protected $email;
+    protected $password;
 
     public function __construct(?UuidInterface $id = null)
     {

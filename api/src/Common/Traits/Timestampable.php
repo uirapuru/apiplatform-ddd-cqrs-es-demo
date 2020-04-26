@@ -6,19 +6,10 @@ use DateTimeImmutable;
 
 trait Timestampable
 {
-    /**
-     * @var DateTimeImmutable $created
-     */
-    protected $createdAt;
+    protected DateTimeImmutable $createdAt;
 
-    /**
-     * @var DateTimeImmutable $updatedAt
-     */
-    protected $updatedAt;
+    protected DateTimeImmutable $updatedAt;
 
-    /**
-     * @var DatetimeImmutable $deletedAt
-     */
-    protected $deletedAt;
+    protected DatetimeImmutable $deletedAt;
 
 }

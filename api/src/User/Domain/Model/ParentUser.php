@@ -1,8 +1,8 @@
 <?php
 
-namespace App\User\Entity;
+namespace App\User\Domain\Model;
 
-class ParentUser extends AbstractUser
+class ParentUser extends AbstractUser implements CustomerInterface
 {
     /** @var Member[] */
     protected $children;

@@ -5,10 +5,7 @@ use Ramsey\Uuid\UuidInterface;
 
 trait UuidTrait
 {
-    /**
-     * @var UuidInterface
-     */
-    private $id;
+    private UuidInterface $id;
 
     public function id(): UuidInterface
     {

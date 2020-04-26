@@ -1,0 +1,28 @@
+default:
+    formatters:
+      pretty:
+        verbose:  true
+        paths:    false
+        snippets: false
+        
+    suites:
+        default:
+            contexts:
+#                - FeatureContext:
+#                    kernel: '@kernel'
+                - Behat\MinkExtension\Context\MinkContext
+                - behatch:context:json
+                - behatch:context:rest
+    extensions:
+        FriendsOfBehat\SymfonyExtension:
+          bootstrap: ~
+          kernel:
+            class: ~
+            path: ~
+            environment: ~
+            debug: ~
+        Behatch\Extension: ~
+        Behat\MinkExtension:
+          sessions:
+            symfony:
+              symfony: ~

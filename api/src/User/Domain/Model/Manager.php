@@ -1,8 +1,8 @@
 <?php
 
-namespace App\User\Entity;
+namespace App\User\Domain\Model;
 
-class Manager extends AbstractUser
+class Manager extends AbstractUser implements EmployeeInterface
 {
     /** @var Instructor[] */
     protected $instructors;
