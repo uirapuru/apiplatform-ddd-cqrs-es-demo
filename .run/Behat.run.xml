@@ -6,7 +6,7 @@
         <option name="interpreterName" value="PHP 7.4" />
       </PhpTestInterpreterSettings>
       <envs>
-        <env name="APP_ENV" value="test" />
+        <env name="APP_ENV" value="test APP_DEBUG=true" />
       </envs>
     </CommandLine>
     <method v="2" />

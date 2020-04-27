@@ -6,45 +6,67 @@ use App\Common\Traits\Timestampable;
 use App\Common\Traits\UuidTrait;
 use App\Common\ValueObject\Price;
 use App\Entry\Entity\Entry;
+use App\User\Domain\Model\CustomerInterface;
 use DateTimeImmutable;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Webmozart\Assert\Assert;
 
-class Voucher
+final class Voucher
 {
     use UuidTrait, Timestampable;
-
+    private CustomerInterface $customer;
     private ?DateTimeImmutable $startDate;
-
     private ?DateTimeImmutable $endDate;
-
     private ?int $maximumAmount;
-
     private ?Price $price;
-
+    private DateTimeImmutable $closedAt;
+    private Type $type;
     /**
      * @var Entry[]
      */
     private iterable $entries = [];
 
-    private DateTimeImmutable $closedAt;
-
-    public function __construct(UuidInterface $id, ?DateTimeImmutable $startDate, ?DateTimeImmutable $endDate, ?Price $price, ?int $maximumAmount, iterable $entries = [])
-    {
+    public function __construct(
+        ?UuidInterface $id,
+        CustomerInterface $customer,
+        Type $type,
+        ?DateTimeImmutable $startDate,
+        ?DateTimeImmutable $endDate,
+        ?Price $price,
+        ?int $maximumAmount,
+        iterable $entries = []
+    ) {
         if($endDate && $startDate) {
             Assert::lessThanEq($startDate->getTimestamp(), $endDate->getTimestamp());
         }
 
         $this->id = $id ?? Uuid::uuid4();
+        $this->type = $type;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
-        $this->price = $price;
+        $this->price = $price; // @todo: remove. po co cena? lepiej jak karnet opiewa na jakąś kwotę do wykorzystania
         $this->maximumAmount = $maximumAmount;
         $this->entries = $entries;
 
         $this->createdAt = new DateTimeImmutable("now");
         $this->updatedAt = new DateTimeImmutable("now");
+        $this->customer = $customer;
+    }
+
+    public static function create(
+        ?UuidInterface $id,
+        CustomerInterface $customer,
+        Type $type,
+        ?DateTimeImmutable $startDate,
+        ?DateTimeImmutable $endDate,
+        ?Price $price,
+        ?int $maximumAmount
+    ) : self
+    {
+        return new self(
+            $id, $customer, $type, $startDate, $endDate, $price, $maximumAmount
+        );
     }
 
     public function addEntry(Entry $entry) : void

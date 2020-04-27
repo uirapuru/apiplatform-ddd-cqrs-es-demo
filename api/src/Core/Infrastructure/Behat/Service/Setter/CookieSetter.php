@@ -3,43 +3,34 @@ declare(strict_types=1);
 
 namespace App\Core\Infrastructure\Behat\Service\Setter;
 
-use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Session;
 use FriendsOfBehat\SymfonyExtension\Driver\SymfonyDriver;
+use FriendsOfBehat\SymfonyExtension\Mink\MinkParameters;
 use Symfony\Component\BrowserKit\Cookie;
 
 final class CookieSetter implements CookieSetterInterface
 {
     private Session $minkSession;
+    private MinkParameters $minkParameters;
 
-    private array $minkParameters;
-
-    public function __construct(Session $minkSession, array $minkParameters = [])
+    public function __construct(Session $minkSession, MinkParameters $minkParameters)
     {
-        if (!is_array($minkParameters) && !$minkParameters instanceof \ArrayAccess) {
-            throw new \InvalidArgumentException(sprintf(
-                '"$minkParameters" passed to "%s" has to be an array or implement "%s".',
-                self::class,
-                \ArrayAccess::class
-            ));
-        }
-
         $this->minkSession = $minkSession;
         $this->minkParameters = $minkParameters;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setCookie($name, $value)
+    public function setCookie($name, $value) : void
     {
         $this->prepareMinkSessionIfNeeded($this->minkSession);
 
         $driver = $this->minkSession->getDriver();
 
         if ($driver instanceof SymfonyDriver) {
-            $driver->getClient()->getCookieJar()->set(
-                new Cookie($name, $value, null, null, parse_url($this->minkParameters['base_url'], \PHP_URL_HOST))
+            $url = $this->minkParameters->offsetGet('base_url');
+            $baseUrl = parse_url($url, \PHP_URL_HOST);
+
+            $driver->getBrowser()->getCookieJar()->set(
+                new Cookie($name, $value, null, null, $baseUrl)
             );
 
             return;
@@ -61,10 +52,6 @@ final class CookieSetter implements CookieSetterInterface
 
         if ($driver instanceof SymfonyDriver) {
             return false;
-        }
-
-        if ($driver instanceof Selenium2Driver && $driver->getWebDriverSession() === null) {
-            return true;
         }
 
         if (false !== strpos($session->getCurrentUrl(), $this->minkParameters['base_url'])) {

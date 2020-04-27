@@ -6,6 +6,8 @@ namespace App\Core\Infrastructure\Behat\Context\Setup;
 use App\Core\Infrastructure\Behat\Service\SecurityServiceInterface;
 use App\Core\Infrastructure\Behat\Service\SharedStorageInterface;
 use App\User\Domain\Model\Admin;
+use App\User\Domain\Model\EmailAddress;
+use App\User\Domain\Model\FullName;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use Behat\Behat\Context\Context;
 use Webmozart\Assert\Assert;
@@ -36,13 +38,19 @@ final class AdminSecurityContext implements Context
      */
     public function iAmLoggedInAsAnAdministrator()
     {
-        $user = new Admin(); // @todo inject factory
+        $admin = Admin::create(
+            'admin',
+            FullName::create("john", "doe"),
+            EmailAddress::create("admin@admin.pl"),
+            "password",
+            "salt"
+        );
 
-        $this->userRepository->add($user);
+        $this->userRepository->add($admin);
 
-        $this->securityService->logIn($user);
+        $this->securityService->logIn($admin);
 
-        $this->sharedStorage->set('administrator', $user);
+        $this->sharedStorage->set('administrator', $admin);
     }
 
     /**

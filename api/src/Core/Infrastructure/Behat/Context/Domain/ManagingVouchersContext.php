@@ -2,57 +2,55 @@
 
 namespace App\Core\Infrastructure\Behat\Context\Domain;
 
+use App\Common\ValueObject\Price;
 use App\Core\Infrastructure\Behat\Service\SharedStorageInterface;
 use App\Payment\Domain\Repository\PaymentRepositoryInterface;
+use App\User\Domain\Model\CustomerInterface;
 use App\User\Domain\Repository\UserRepositoryInterface;
+use App\Voucher\Domain\Command\CreateVoucher;
+use App\Voucher\Domain\Model\Type;
 use App\Voucher\Domain\Repository\VoucherRepositoryInterface;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Tester\Exception\PendingException;
+use Ramsey\Uuid\Uuid;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class ManagingVouchersContext implements Context
 {
     private SharedStorageInterface $sharedStorage;
-
     private UserRepositoryInterface $userRepository;
-
     private VoucherRepositoryInterface $voucherRepository;
-
     private PaymentRepositoryInterface $paymentRepository;
+    private MessageBusInterface $bus;
 
     public function __construct(
         SharedStorageInterface $sharedStorage,
         UserRepositoryInterface $userRepository,
         VoucherRepositoryInterface $voucherRepository,
-        PaymentRepositoryInterface $paymentRepository
+        PaymentRepositoryInterface $paymentRepository,
+        MessageBusInterface $bus
     ) {
         $this->sharedStorage = $sharedStorage;
         $this->userRepository = $userRepository;
         $this->voucherRepository = $voucherRepository;
         $this->paymentRepository = $paymentRepository;
+        $this->bus = $bus;
     }
 
     /**
-     * @Given /^I want to create a new voucher$/
+     * @When I sell voucher for user :user
      */
-    public function iWantToCreateANewVoucher()
+    public function iSellVoucherForUser(CustomerInterface $user)
     {
-        throw new PendingException();
+        $this->sharedStorage->set("sell_to", $user);
     }
 
     /**
-     * @When /^I sell it for user "([^"]*)"$/
+     * @Given I set its price to :price
      */
-    public function iSellItForUser($arg1)
+    public function iSetItsPriceTo(string $price)
     {
-        throw new PendingException();
-    }
-
-    /**
-     * @Given /^I set its price to "([^"]*)"$/
-     */
-    public function iSetItsPriceTo($arg1)
-    {
-        throw new PendingException();
+        $this->sharedStorage->set("sell_price", Price::fromString($price));
     }
 
     /**
@@ -60,7 +58,7 @@ class ManagingVouchersContext implements Context
      */
     public function iSpecifyThatItWasCashPaid()
     {
-        throw new PendingException();
+
     }
 
     /**
@@ -68,7 +66,15 @@ class ManagingVouchersContext implements Context
      */
     public function iAddIt()
     {
-        throw new PendingException();
+        $this->bus->dispatch(new CreateVoucher(
+            $this->sharedStorage->get('sell_to'),
+            Type::OPEN(),
+            Uuid::uuid4(),
+            null,
+            null,
+            null,
+            null
+        ));
     }
 
     /**

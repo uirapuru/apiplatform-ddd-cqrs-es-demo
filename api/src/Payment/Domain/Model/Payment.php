@@ -10,11 +10,8 @@ use App\User\Domain\Model\CustomerInterface;
 class Payment
 {
     use UuidTrait, Timestampable;
-
     private iterable $products;
-
     private CustomerInterface $customer;
-
     private Price $totalPrice;
 
     public function __construct(iterable $products, CustomerInterface $customer)

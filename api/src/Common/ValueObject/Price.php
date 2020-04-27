@@ -25,6 +25,11 @@ class Price
         return new self(0, 'PLN');
     }
 
+    public static function fromString(string $price) : self
+    {
+        return new self(...explode(" ", $price));
+    }
+
     public function amount(): string
     {
         return $this->amount;

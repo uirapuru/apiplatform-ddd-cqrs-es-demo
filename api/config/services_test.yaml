@@ -1,6 +1,14 @@
 services:
     _defaults:
-        public: true
+        public: false
+        autowire: true
+        autoconfigure: true
 
-#    App\Tests\Behat\:
-#        resource: '../src/**/Context/*'
+    App\Core\Infrastructure\Behat\:
+        resource: '../src/Core/Infrastructure/Behat/**/*'
+
+    App\Voucher\Domain\Repository\VoucherRepositoryInterface:
+        class: App\Voucher\Infrastructure\Repository\InMemoryVoucherRepository
+
+    App\User\Domain\Repository\UserRepositoryInterface:
+        class: App\User\Infrastructure\Repository\InMemoryUserRepository

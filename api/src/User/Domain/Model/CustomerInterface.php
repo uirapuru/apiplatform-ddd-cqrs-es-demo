@@ -3,7 +3,7 @@
 namespace App\User\Domain\Model;
 
 
-interface CustomerInterface
+interface CustomerInterface extends UserInterface
 {
 
 }

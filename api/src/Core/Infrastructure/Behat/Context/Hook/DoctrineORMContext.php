@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Core\Infrastructure\Behat\Hook;
+namespace App\Core\Infrastructure\Behat\Context\Hook;
 
 use Behat\Behat\Context\Context;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
@@ -19,6 +19,11 @@ final class DoctrineORMContext implements Context
     /**
      * @BeforeScenario
      */
+    public function createSchema()
+    {
+
+    }
+
     public function purgeDatabase()
     {
         $this->entityManager->getConnection()->getConfiguration()->setSQLLogger(null);

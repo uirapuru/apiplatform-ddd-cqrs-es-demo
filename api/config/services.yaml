@@ -17,13 +17,13 @@ services:
         class: \DateTimeImmutable
         
     App\Voucher\Domain\Repository\VoucherRepositoryInterface:
-        class: App\Voucher\Domain\Repository\VoucherRepository
+        class: App\Voucher\Infrastructure\Repository\VoucherRepository
         factory: ['@doctrine.orm.default_entity_manager', 'getRepository']
         arguments:
             - App\Voucher\Domain\Model\Voucher
         
     App\User\Domain\Repository\UserRepositoryInterface:
-        class: App\User\Domain\Repository\UserRepository
+        class: App\User\Infrastructure\Repository\UserRepository
         factory: ['@doctrine.orm.default_entity_manager', 'getRepository']
         arguments:
             - App\User\Domain\Model\AbstractUser
@@ -33,5 +33,4 @@ services:
         factory: ['@doctrine.orm.default_entity_manager', 'getRepository']
         arguments:
             - App\Payment\Domain\Model\Payment
-
 

@@ -6,6 +6,8 @@ namespace App\Core\Infrastructure\Behat\Context\Setup;
 use App\Core\Infrastructure\Behat\Service\SecurityServiceInterface;
 use App\Core\Infrastructure\Behat\Service\SharedStorageInterface;
 use App\User\Domain\Model\Admin;
+use App\User\Domain\Model\EmailAddress;
+use App\User\Domain\Model\FullName;
 use App\User\Domain\Model\Member;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use Behat\Behat\Context\Context;
@@ -33,9 +35,15 @@ final class MemberContext implements Context
     {
         $uuid = Uuid::uuid4();
 
-        $member = new Member($uuid, $fullname);
+        $member = Member::create(
+            'member',
+            FullName::fromString($fullname),
+            EmailAddress::create("member@member.pl"),
+            "password",
+            "salt"
+        );
 
-        $this->userRepository->store($member);
+        $this->userRepository->add($member);
 
         $this->sharedStorage->set('member', $member);
     }

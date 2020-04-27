@@ -2,7 +2,7 @@
 
 namespace App\User\Domain\Model;
 
-interface EmployeeInterface
+interface EmployeeInterface extends UserInterface
 {
 
 }

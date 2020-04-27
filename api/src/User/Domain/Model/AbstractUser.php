@@ -7,61 +7,93 @@ use App\Common\Traits\UuidTrait;
 use DateTimeImmutable;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 abstract class AbstractUser implements UserInterface
 {
     use UuidTrait, Timestampable;
 
-    protected $username;
-    protected $email;
-    protected $password;
+    protected string $username;
+    protected FullName $fullName;
+    protected EmailAddress $email;
+    protected string $password;
+    protected string $salt;
 
-    public function __construct(?UuidInterface $id = null)
-    {
+    protected function __construct(
+        UuidInterface $id,
+        string $username,
+        FullName $fullName,
+        EmailAddress $email,
+        string $password,
+        string $salt
+    ) {
         $this->id = $id ?? Uuid::uuid4();
+
+        $this->username = $username;
+        $this->fullName = $fullName;
+        $this->email = $email;
+        $this->password = $password;
+        $this->salt = $salt;
 
         $this->createdAt = new DateTimeImmutable("now");
         $this->updatedAt = new DateTimeImmutable("now");
     }
 
-    /**
-     * @inheritDoc
-     */
+    public static function create(
+        string $username,
+        FullName $fullName,
+        EmailAddress $email,
+        string $password,
+        string $salt,
+        ?UuidInterface $id = null
+    ) : self
+    {
+        return new static(
+            $id ?? Uuid::uuid4(),
+            $username,
+            $fullName,
+            $email,
+            $password,
+            $salt
+        );
+    }
+
     public function getRoles()
     {
-        // TODO: Implement getRoles() method.
+        return ['ROLE_USER'];
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getPassword()
     {
-        // TODO: Implement getPassword() method.
+        return $this->password;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getSalt()
     {
-        // TODO: Implement getSalt() method.
+        return $this->salt;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getUsername()
     {
-        // TODO: Implement getUsername() method.
+        return $this->username;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function eraseCredentials()
     {
         // TODO: Implement eraseCredentials() method.
+    }
+
+    public function fullName(): FullName
+    {
+        return $this->fullName;
+    }
+
+    public function id(): UuidInterface
+    {
+        return $this->id;
+    }
+
+    public function email(): EmailAddress
+    {
+        return $this->email;
     }
 }

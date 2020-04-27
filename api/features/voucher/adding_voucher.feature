@@ -9,8 +9,7 @@ Feature: Adding a new voucher
     And I am logged in as an administrator
 
   Scenario: Adding a new paid voucher
-    Given I want to create a new voucher
-    When I sell it for user "John Doe"
+    When I sell voucher for user "John Doe"
     And I set its price to "10.00 PLN"
     And I specify that it was cash paid
     And I add it
