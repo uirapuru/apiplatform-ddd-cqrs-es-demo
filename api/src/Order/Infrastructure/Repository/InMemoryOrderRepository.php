@@ -30,7 +30,7 @@ class InMemoryOrderRepository implements OrderRepositoryInterface
 
     public function findByUser(CustomerInterface $user) : iterable
     {
-        return array_filter($this->orders, fn(Order $order): bool => $user == $order->order()->customer());
+        return array_filter($this->orders, fn(Order $order): bool => $user == $order->customer());
     }
 
     public function size(): int

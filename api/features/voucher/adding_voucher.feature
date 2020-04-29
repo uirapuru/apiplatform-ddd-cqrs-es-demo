@@ -12,8 +12,7 @@ Feature: Adding a new voucher
     When I place order for voucher
     And I sell it to user "John Doe"
     And I set its price to "10.00 PLN"
-    And I specify that it was cash paid
-    And I add it
+    And customer paid for it
     Then I should be notified that voucher has been successfully created
     And the new voucher should appear in the app
     And the new order for user "John Doe" should be created

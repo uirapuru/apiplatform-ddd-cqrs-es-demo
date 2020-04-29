@@ -1,18 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Order\Domain\Command;
+namespace App\Core\Domain\Command;
 
+use App\Common\ValueObject\Price;
 use App\Core\Domain\Command;
 use App\Voucher\Domain\Model\Type;
 use DateTimeImmutable;
 use Ramsey\Uuid\UuidInterface;
 
-class PlaceOrderForVoucher implements Command
+final class PlacePaidOrderForVoucher implements Command
 {
     private UuidInterface $voucherId;
     private UuidInterface $customerId;
     private Type $voucherType;
+    private ?Price $price;
     private ?DateTimeImmutable $startDate;
     private ?DateTimeImmutable $endDate;
     private ?int $entriesAmount;
@@ -21,6 +23,7 @@ class PlaceOrderForVoucher implements Command
         UuidInterface $voucherId,
         UuidInterface $customerId,
         Type $voucherType,
+        ?Price $price,
         ?DateTimeImmutable $startDate = null,
         ?DateTimeImmutable $endDate = null,
         ?int $entriesAmount = null
@@ -31,6 +34,7 @@ class PlaceOrderForVoucher implements Command
         $this->startDate = $startDate;
         $this->endDate = $endDate;
         $this->entriesAmount = $entriesAmount;
+        $this->price = $price;
     }
 
     public function voucherId(): UuidInterface
@@ -61,5 +65,10 @@ class PlaceOrderForVoucher implements Command
     public function entriesAmount(): ?int
     {
         return $this->entriesAmount;
+    }
+
+    public function price(): ?Price
+    {
+        return $this->price;
     }
 }

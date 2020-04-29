@@ -1,13 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Order\Domain\Handler;
+namespace App\Core\Domain\Handler;
 
-use App\Order\Domain\Command\PlaceOrderForVoucher;
+use App\Core\Domain\Command\PlacePaidOrderForVoucher;
 use App\Core\Domain\Event\OrderForVoucherPlaced;
+use App\Payment\Domain\Event\PaymentWasPaid;
+use App\Payment\Domain\Model\Type;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-final class PlaceOrderHandler
+final class PlacePaidOrderHandler
 {
     private MessageBusInterface $eventBus;
 
@@ -16,8 +19,10 @@ final class PlaceOrderHandler
         $this->eventBus = $eventBus;
     }
 
-    public function __invoke(PlaceOrderForVoucher $command) : void
+    public function __invoke(PlacePaidOrderForVoucher $command) : void
     {
+        $price = $command->price();
+
         $this->eventBus->dispatch(new OrderForVoucherPlaced(
             $command->voucherId(),
             [
@@ -29,7 +34,14 @@ final class PlaceOrderHandler
                 "startDate"      => $command->startDate(),
                 "endDate"        => $command->endDate(),
                 "entriesAmount"  => $command->entriesAmount(),
+                "price"          => $price
             ]
+        ));
+
+        $this->eventBus->dispatch(new PaymentWasPaid(
+            Uuid::uuid4(),
+            $command->voucherId(),
+            Type::CASH()
         ));
     }
 }

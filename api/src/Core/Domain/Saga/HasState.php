@@ -8,9 +8,9 @@ use Symfony\Component\Workflow\StateMachine;
 trait HasState
 {
     private StateMachine $workflow;
-    private string $state;
+    private ?string $state = null;
 
-    public function getState() : string
+    public function getState() : ?string
     {
         return $this->state;
     }

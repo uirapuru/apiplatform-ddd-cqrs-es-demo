@@ -4,7 +4,7 @@ namespace App\Core\Infrastructure\Behat\Context\Domain;
 
 use App\Common\ValueObject\Price;
 use App\Core\Infrastructure\Behat\Service\SharedStorageInterface;
-use App\Order\Domain\Command\PlaceOrderForVoucher;
+use App\Core\Domain\Command\PlacePaidOrderForVoucher;
 use App\Payment\Domain\Repository\PaymentRepositoryInterface;
 use App\User\Domain\Model\CustomerInterface;
 use App\User\Domain\Repository\UserRepositoryInterface;
@@ -12,7 +12,6 @@ use App\Voucher\Domain\Model\Type;
 use App\Voucher\Domain\Model\Voucher;
 use App\Voucher\Domain\Repository\VoucherRepositoryInterface;
 use Behat\Behat\Context\Context;
-use Behat\Behat\Tester\Exception\PendingException;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Webmozart\Assert\Assert;
@@ -48,27 +47,11 @@ final class ManagingVouchersContext implements Context
     }
 
     /**
-     * @Given I specify that it was cash paid
-     */
-    public function iSpecifyThatItWasCashPaid()
-    {
-
-    }
-
-    /**
      * @Given I add it
      */
     public function iAddIt()
     {
-        $voucherId = Uuid::uuid4();
 
-        $this->commandBus->dispatch(new PlaceOrderForVoucher(
-            $voucherId,
-            $this->sharedStorage->get('sell_to')->id(),
-            Type::OPEN()
-        ));
-
-        $this->sharedStorage->set("last_voucher_id", $voucherId);
     }
 
     /**
@@ -123,7 +106,25 @@ final class ManagingVouchersContext implements Context
      */
     public function iShouldBeNotifiedThatVoucherHasBeenSuccessfullyCreated()
     {
-        throw new PendingException();
+
     }
 
+    /**
+     * @Given /^customer paid for it$/
+     */
+    public function customerPaidForIt()
+    {
+        $voucherId = Uuid::uuid4();
+
+        $price = $this->sharedStorage->get("sell_price");
+
+        $this->commandBus->dispatch(new PlacePaidOrderForVoucher(
+            $voucherId,
+            $this->sharedStorage->get('sell_to')->id(),
+            Type::OPEN(),
+            $price
+        ));
+
+        $this->sharedStorage->set("last_voucher_id", $voucherId);
+    }
 }
