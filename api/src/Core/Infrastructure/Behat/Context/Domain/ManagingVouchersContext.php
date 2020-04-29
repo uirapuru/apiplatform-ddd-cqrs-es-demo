@@ -4,45 +4,39 @@ namespace App\Core\Infrastructure\Behat\Context\Domain;
 
 use App\Common\ValueObject\Price;
 use App\Core\Infrastructure\Behat\Service\SharedStorageInterface;
+use App\Order\Domain\Command\PlaceOrderForVoucher;
 use App\Payment\Domain\Repository\PaymentRepositoryInterface;
 use App\User\Domain\Model\CustomerInterface;
 use App\User\Domain\Repository\UserRepositoryInterface;
-use App\Voucher\Domain\Command\CreateVoucher;
 use App\Voucher\Domain\Model\Type;
+use App\Voucher\Domain\Model\Voucher;
 use App\Voucher\Domain\Repository\VoucherRepositoryInterface;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Tester\Exception\PendingException;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Webmozart\Assert\Assert;
 
-class ManagingVouchersContext implements Context
+final class ManagingVouchersContext implements Context
 {
     private SharedStorageInterface $sharedStorage;
     private UserRepositoryInterface $userRepository;
     private VoucherRepositoryInterface $voucherRepository;
     private PaymentRepositoryInterface $paymentRepository;
-    private MessageBusInterface $bus;
+    private MessageBusInterface $commandBus;
 
     public function __construct(
         SharedStorageInterface $sharedStorage,
         UserRepositoryInterface $userRepository,
         VoucherRepositoryInterface $voucherRepository,
         PaymentRepositoryInterface $paymentRepository,
-        MessageBusInterface $bus
+        MessageBusInterface $commandBus
     ) {
         $this->sharedStorage = $sharedStorage;
         $this->userRepository = $userRepository;
         $this->voucherRepository = $voucherRepository;
         $this->paymentRepository = $paymentRepository;
-        $this->bus = $bus;
-    }
-
-    /**
-     * @When I sell voucher for user :user
-     */
-    public function iSellVoucherForUser(CustomerInterface $user)
-    {
-        $this->sharedStorage->set("sell_to", $user);
+        $this->commandBus = $commandBus;
     }
 
     /**
@@ -54,7 +48,7 @@ class ManagingVouchersContext implements Context
     }
 
     /**
-     * @Given /^I specify that it was cash paid$/
+     * @Given I specify that it was cash paid
      */
     public function iSpecifyThatItWasCashPaid()
     {
@@ -62,58 +56,74 @@ class ManagingVouchersContext implements Context
     }
 
     /**
-     * @Given /^I add it$/
+     * @Given I add it
      */
     public function iAddIt()
     {
-        $this->bus->dispatch(new CreateVoucher(
-            $this->sharedStorage->get('sell_to'),
-            Type::OPEN(),
-            Uuid::uuid4(),
-            null,
-            null,
-            null,
-            null
+        $voucherId = Uuid::uuid4();
+
+        $this->commandBus->dispatch(new PlaceOrderForVoucher(
+            $voucherId,
+            $this->sharedStorage->get('sell_to')->id(),
+            Type::OPEN()
         ));
+
+        $this->sharedStorage->set("last_voucher_id", $voucherId);
     }
 
     /**
-     * @Then /^I should be notified that it has been successfully created$/
+     * @Then I should be notified that it has been successfully created
      */
     public function iShouldBeNotifiedThatItHasBeenSuccessfullyCreated()
     {
-        throw new PendingException();
+        Assert::notNull($this->sharedStorage->get("voucher_was_added_event"));
     }
 
     /**
-     * @Given /^the new voucher should appear in the app$/
+     * @Given the new voucher should appear in the app
      */
     public function theNewVoucherShouldAppearInTheApp()
     {
-        throw new PendingException();
+        $voucher = $this->voucherRepository->find($this->sharedStorage->get("last_voucher_id"));
+
+        Assert::notNull($voucher);
+
+        $this->sharedStorage->set("last_voucher", $voucher);
     }
 
     /**
-     * @Given /^it should be active$/
+     * @Given it should be active
      */
     public function itShouldBeActive()
     {
-        throw new PendingException();
+        /** @var Voucher $voucher */
+        $voucher = $this->sharedStorage->get("last_voucher");
+        Assert::true($voucher->isActive());
     }
 
     /**
-     * @Given /^the new payment for user "([^"]*)" should be created$/
+     * @When /^I place order for voucher$/
      */
-    public function theNewPaymentForUserShouldBeCreated($arg1)
+    public function iPlaceOrderForVoucher()
+    {
+
+    }
+
+    /**
+     * @Given I sell it to user :user
+     *
+     */
+    public function iSellItToUser(CustomerInterface $user) : void
+    {
+        $this->sharedStorage->set("sell_to", $user);
+    }
+
+    /**
+     * @Then /^I should be notified that voucher has been successfully created$/
+     */
+    public function iShouldBeNotifiedThatVoucherHasBeenSuccessfullyCreated()
     {
         throw new PendingException();
     }
 
-    /**
-     * @Given /^the payment should be done\.$/
-     */
-    public function thePaymentShouldBeDone()
-    {
-        throw new PendingException();
-    }
 }

@@ -1,24 +1,26 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Payment\Domain\Model;
 
 use App\Common\Traits\Timestampable;
 use App\Common\Traits\UuidTrait;
-use App\Common\ValueObject\Price;
-use App\User\Domain\Model\CustomerInterface;
+use App\Order\Domain\Model\Order;
+use Ramsey\Uuid\UuidInterface;
 
-class Payment
+final class Payment
 {
     use UuidTrait, Timestampable;
-    private iterable $products;
-    private CustomerInterface $customer;
-    private Price $totalPrice;
+    private Order $order;
 
-    public function __construct(iterable $products, CustomerInterface $customer)
+    public function __construct(UuidInterface $id, Order $order)
     {
-        $this->products = $products;
-        $this->customer = $customer;
+        $this->id = $id;
+        $this->order = $order;
+    }
 
-//        $this->calculateTotalPrice();
+    public function order(): Order
+    {
+        return $this->order;
     }
 }

@@ -6,7 +6,6 @@ namespace App\Core\Infrastructure\Behat\Context\Transform;
 use App\User\Domain\Model\CustomerInterface;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use Behat\Behat\Context\Context;
-use Webmozart\Assert\Assert;
 
 final class UserContext implements Context
 {

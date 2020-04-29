@@ -2,11 +2,11 @@ imports:
   - ./src/Core/Infrastructure/Behat/Resources/config/suites.yaml
 
 default:
-    formatters:
-      pretty:
-        verbose:  true
-        paths:    false
-        snippets: false
+#    formatters:
+#      pretty:
+#        verbose:  true
+#        paths:    true
+#        snippets: true
 
     extensions:
         FriendsOfBehat\SymfonyExtension:

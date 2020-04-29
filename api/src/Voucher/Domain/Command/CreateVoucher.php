@@ -12,35 +12,32 @@ use Ramsey\Uuid\UuidInterface;
 
 class CreateVoucher implements Command
 {
-    private CustomerInterface $customer;
+    private UuidInterface $customerId;
     private Type $type;
     private ?UuidInterface $id;
     private ?DateTimeImmutable $startDate;
     private ?DateTimeImmutable $endDate;
     private ?int $maximumAmount;
-    private ?Price $price;
 
     public function __construct(
-        CustomerInterface $customer,
+        UuidInterface $customerId,
         Type $type,
         ?UuidInterface $id,
         ?DateTimeImmutable $startDate,
         ?DateTimeImmutable $endDate,
-        ?int $maximumAmount,
-        ?Price $price
+        ?int $maximumAmount
     ) {
-        $this->customer = $customer;
+        $this->customerId = $customerId;
         $this->type = $type;
         $this->id = $id;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
         $this->maximumAmount = $maximumAmount;
-        $this->price = $price;
     }
 
-    public function customer(): CustomerInterface
+    public function customerId(): UuidInterface
     {
-        return $this->customer;
+        return $this->customerId;
     }
 
     public function type(): Type
@@ -66,10 +63,5 @@ class CreateVoucher implements Command
     public function maximumAmount(): ?int
     {
         return $this->maximumAmount;
-    }
-
-    public function price(): ?Price
-    {
-        return $this->price;
     }
 }

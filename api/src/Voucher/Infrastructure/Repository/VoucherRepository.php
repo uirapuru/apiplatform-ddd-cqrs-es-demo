@@ -5,12 +5,26 @@ namespace App\Voucher\Infrastructure\Repository;
 
 use App\Voucher\Domain\Model\Voucher;
 use App\Voucher\Domain\Repository\VoucherRepositoryInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Ramsey\Uuid\UuidInterface;
 
-final class VoucherRepository extends EntityRepository implements VoucherRepositoryInterface
+final class VoucherRepository implements VoucherRepositoryInterface
 {
+    private EntityManagerInterface $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
+    public function find(UuidInterface $uuid): ?Voucher
+    {
+        return $this->em->getRepository(Voucher::class)->find($uuid);
+    }
+
     public function add(Voucher $user): void
     {
-        $this->_em->persist($user);
+        $this->em->persist($user);
     }
 }

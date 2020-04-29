@@ -9,6 +9,8 @@
             <generator strategy="NONE"/>
         </id>
 
+        <one-to-one field="order" target-entity="App\Order\Domain\Model\Order" />
+
     </entity>
 
 </doctrine-mapping>

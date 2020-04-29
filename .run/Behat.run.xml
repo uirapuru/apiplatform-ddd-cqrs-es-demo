@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Behat" type="PhpBehatConfigurationType">
-    <BehatRunner scenario="" scope="Yml" />
+    <BehatRunner scenario="" scope="Yml" options="-vvv" />
     <CommandLine>
       <PhpTestInterpreterSettings>
         <option name="interpreterName" value="PHP 7.4" />

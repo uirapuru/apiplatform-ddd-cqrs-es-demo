@@ -7,6 +7,5 @@ default:
         - App\Core\Infrastructure\Behat\Context\Setup\MemberContext
         - App\Core\Infrastructure\Behat\Context\Hook\DoctrineORMContext
         - App\Core\Infrastructure\Behat\Context\Domain\ManagingVouchersContext
-
-#      filters:
-#        tags: "@managing_voucher && @domain"
+        - App\Core\Infrastructure\Behat\Context\Domain\PaymentsContext
+        - App\Core\Infrastructure\Behat\Context\Domain\OrdersContext

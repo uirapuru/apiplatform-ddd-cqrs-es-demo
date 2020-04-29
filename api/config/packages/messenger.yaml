@@ -1,4 +1,6 @@
 framework:
     messenger:
+        default_bus: event.bus
         buses:
             command.bus: null
+            event.bus: null

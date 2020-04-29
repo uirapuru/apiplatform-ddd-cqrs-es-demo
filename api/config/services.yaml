@@ -3,34 +3,40 @@ services:
         public: false
         autowire: true
         autoconfigure: true
+        bind:
+            $commandBus: '@command.bus'
+            $eventBus:   '@event.bus'
 
     App\:
         resource: '../src/**/*'
         exclude:
             - '../src/**/*/{*Controller.php,DependencyInjection,Model,Repository,Resources,Kernel.php}'
             - '../src/Core/*'
+            - '../src/**/*/{Handler}'
 
-    App\Core\Infrastructure\Behat\:
-        resource: '../src/Core/Infrastructure/Behat/**/*'
+    command_handlers:
+        namespace: App\
+        resource: '%kernel.project_dir%/src/**/*/{*Handler.php}'
+        autoconfigure: false
+        tags:
+            - { name: messenger.message_handler, bus: command.bus }
+
+    App\Core\Domain\Saga\VoucherProcessManager:
+        tags:
+            - { name: messenger.message_handler, bus: event.bus, handles: App\Core\Domain\Event\OrderForVoucherPlaced }
 
     DateTimeImmutable:
         class: \DateTimeImmutable
         
     App\Voucher\Domain\Repository\VoucherRepositoryInterface:
         class: App\Voucher\Infrastructure\Repository\VoucherRepository
-        factory: ['@doctrine.orm.default_entity_manager', 'getRepository']
-        arguments:
-            - App\Voucher\Domain\Model\Voucher
         
     App\User\Domain\Repository\UserRepositoryInterface:
         class: App\User\Infrastructure\Repository\UserRepository
-        factory: ['@doctrine.orm.default_entity_manager', 'getRepository']
-        arguments:
-            - App\User\Domain\Model\AbstractUser
         
     App\Payment\Domain\Repository\PaymentRepositoryInterface:
         class: App\Payment\Domain\Repository\PaymentRepository
-        factory: ['@doctrine.orm.default_entity_manager', 'getRepository']
-        arguments:
-            - App\Payment\Domain\Model\Payment
+        
+    App\Order\Domain\Repository\OrderRepositoryInterface:
+        class: App\Order\Domain\Repository\OrderRepository
 

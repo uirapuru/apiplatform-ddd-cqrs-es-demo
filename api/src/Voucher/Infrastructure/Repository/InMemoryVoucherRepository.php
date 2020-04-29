@@ -9,7 +9,7 @@ use Ramsey\Uuid\UuidInterface;
 
 class InMemoryVoucherRepository implements VoucherRepositoryInterface
 {
-    private $vouchers = [];
+    private array $vouchers = [];
 
     public function add(Voucher $user): void
     {
@@ -21,13 +21,9 @@ class InMemoryVoucherRepository implements VoucherRepositoryInterface
         unset($this->vouchers[$voucher->id()->toString()]);
     }
 
-    public function findById(UuidInterface $uuid): ?Voucher
+    public function find(UuidInterface $uuid): ?Voucher
     {
-        if (isset($this->vouchers[$uuid->toString()])) {
-            return $this->vouchers[$uuid->toString()];
-        }
-
-        return null;
+        return $this->vouchers[$uuid->toString()] ?? null;
     }
 
     public function size(): int

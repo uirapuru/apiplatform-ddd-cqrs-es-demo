@@ -8,6 +8,7 @@ use Prooph\EventStore\EventId;
 
 interface DomainEvent
 {
+
     public function eventId() : ?string;
 
     public function eventType() : string;

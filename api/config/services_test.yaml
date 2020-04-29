@@ -12,3 +12,9 @@ services:
 
     App\User\Domain\Repository\UserRepositoryInterface:
         class: App\User\Infrastructure\Repository\InMemoryUserRepository
+
+    App\Order\Domain\Repository\OrderRepositoryInterface:
+        class: App\Order\Infrastructure\Repository\InMemoryOrderRepository
+
+    App\Payment\Domain\Repository\PaymentRepositoryInterface:
+        class: App\Payment\Infrastructure\Repository\InMemoryPaymentRepository

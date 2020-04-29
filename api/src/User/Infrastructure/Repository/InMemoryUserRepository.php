@@ -22,7 +22,7 @@ class InMemoryUserRepository implements UserRepositoryInterface
         unset($this->users[$user->id()->toString()]);
     }
 
-    public function findById(UuidInterface $uuid): ?UserInterface
+    public function find(UuidInterface $uuid): ?UserInterface
     {
         return $this->users[$uuid->toString()] ?? null;
     }
@@ -41,4 +41,5 @@ class InMemoryUserRepository implements UserRepositoryInterface
     {
         return count($this->users);
     }
+
 }

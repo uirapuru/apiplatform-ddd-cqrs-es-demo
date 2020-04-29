@@ -1,0 +1,26 @@
+framework:
+    workflows:
+        voucher_selling:
+            type: 'state_machine'
+            marking_store:
+                type: 'method'
+                property: 'state'
+            supports:
+                - App\Core\Domain\Saga\VoucherProcessManager
+            initial_marking: start
+            places:
+                - start
+                - payment_created
+                - payment_paid
+                - payment_rejected
+            transitions:
+                place_order:
+                    from: start
+                    to: payment_created
+                pay:
+                    from:   payment_created
+                    to:     payment_paid
+                reject_payment:
+                    from:   payment_created
+                    to:     payment_rejected
+                

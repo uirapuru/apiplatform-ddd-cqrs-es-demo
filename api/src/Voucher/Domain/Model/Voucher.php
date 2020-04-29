@@ -19,7 +19,6 @@ final class Voucher
     private ?DateTimeImmutable $startDate;
     private ?DateTimeImmutable $endDate;
     private ?int $maximumAmount;
-    private ?Price $price;
     private DateTimeImmutable $closedAt;
     private Type $type;
     /**
@@ -33,7 +32,6 @@ final class Voucher
         Type $type,
         ?DateTimeImmutable $startDate,
         ?DateTimeImmutable $endDate,
-        ?Price $price,
         ?int $maximumAmount,
         iterable $entries = []
     ) {
@@ -45,7 +43,6 @@ final class Voucher
         $this->type = $type;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
-        $this->price = $price; // @todo: remove. po co cena? lepiej jak karnet opiewa na jakąś kwotę do wykorzystania
         $this->maximumAmount = $maximumAmount;
         $this->entries = $entries;
 
@@ -60,12 +57,11 @@ final class Voucher
         Type $type,
         ?DateTimeImmutable $startDate,
         ?DateTimeImmutable $endDate,
-        ?Price $price,
         ?int $maximumAmount
     ) : self
     {
         return new self(
-            $id, $customer, $type, $startDate, $endDate, $price, $maximumAmount
+            $id, $customer, $type, $startDate, $endDate, $maximumAmount
         );
     }
 
@@ -76,5 +72,10 @@ final class Voucher
         }
 
         $this->entries[] =  $entry;
+    }
+
+    public function isActive() : bool // @todo implement
+    {
+        return true;
     }
 }
