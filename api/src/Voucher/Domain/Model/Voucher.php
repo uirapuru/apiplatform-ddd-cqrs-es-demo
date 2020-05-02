@@ -4,7 +4,6 @@ namespace App\Voucher\Domain\Model;
 
 use App\Common\Traits\Timestampable;
 use App\Common\Traits\UuidTrait;
-use App\Common\ValueObject\Price;
 use App\Entry\Entity\Entry;
 use App\User\Domain\Model\CustomerInterface;
 use DateTimeImmutable;
@@ -25,6 +24,7 @@ final class Voucher
      * @var Entry[]
      */
     private iterable $entries = [];
+    private bool $active;
 
     public function __construct(
         ?UuidInterface $id,
@@ -76,6 +76,12 @@ final class Voucher
 
     public function isActive() : bool // @todo implement
     {
-        return true;
+        return $this->active;
+    }
+
+    public function activate() : void
+    {
+        $this->active = true;
+        $this->updatedAt = new DateTimeImmutable();
     }
 }

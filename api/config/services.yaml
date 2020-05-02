@@ -14,6 +14,16 @@ services:
             - '../src/Core/*'
             - '../src/**/*/{Handler}'
 
+    infrastructure:
+        namespace: App\Core\Infrastructure\
+        resource: '%kernel.project_dir%/src/Core/Infrastructure/**/*'
+        exclude:
+            - '%kernel.project_dir%/src/Core/Infrastructure/Doctrine/*'
+            - '%kernel.project_dir%/src/Core/Infrastructure/Bridge/*'
+            - '%kernel.project_dir%/src/Core/Infrastructure/ApiPlatform/*'
+            - '%kernel.project_dir%/src/Core/Infrastructure/EventStore/*'
+            - '%kernel.project_dir%/src/Core/Infrastructure/Projection/*'
+
     command_handlers:
         namespace: App\
         resource: '%kernel.project_dir%/src/**/*/{*Handler.php}'
@@ -29,15 +39,9 @@ services:
     DateTimeImmutable:
         class: \DateTimeImmutable
         
-    App\Voucher\Domain\Repository\VoucherRepositoryInterface:
-        class: App\Voucher\Infrastructure\Repository\VoucherRepository
-        
-    App\User\Domain\Repository\UserRepositoryInterface:
-        class: App\User\Infrastructure\Repository\UserRepository
-        
-    App\Payment\Domain\Repository\PaymentRepositoryInterface:
-        class: App\Payment\Domain\Repository\PaymentRepository
-        
-    App\Order\Domain\Repository\OrderRepositoryInterface:
-        class: App\Order\Domain\Repository\OrderRepository
+    App\Voucher\Domain\Repository\VoucherRepositoryInterface:   '@App\Voucher\Infrastructure\Repository\VoucherRepository'
+    App\User\Domain\Repository\UserRepositoryInterface:         '@App\User\Infrastructure\Repository\UserRepository'
+    App\Payment\Domain\Repository\PaymentRepositoryInterface:   '@App\Payment\Domain\Repository\PaymentRepository'
+    App\Order\Domain\Repository\OrderRepositoryInterface:       '@App\Order\Domain\Repository\OrderRepository'
+    App\Core\Infrastructure\Storage\ProcessRepositoryInterface: '@App\Core\Infrastructure\Storage\InMemoryProcessRepository'
 

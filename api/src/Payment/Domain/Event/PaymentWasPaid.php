@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Payment\Domain\Event;
 
+use App\Common\ValueObject\Price;
 use App\Core\Domain\DomainEvent;
 use App\Payment\Domain\Model\Type;
 use Prooph\EventStore\EventId;
@@ -14,12 +15,14 @@ final class PaymentWasPaid implements DomainEvent
     private UuidInterface $eventId;
     private UuidInterface $paymentId;
     private Type $type;
+    private Price $amount;
 
-    public function __construct(UuidInterface $eventId, UuidInterface $paymentId, Type $type)
+    public function __construct(UuidInterface $eventId, UuidInterface $paymentId, Type $type, Price $amount)
     {
         $this->eventId = $eventId;
         $this->paymentId = $paymentId;
         $this->type = $type;
+        $this->amount = $amount;
     }
 
     public function eventId(): ?string
@@ -43,9 +46,7 @@ final class PaymentWasPaid implements DomainEvent
     public static function from(EventId $eventId, array $data): DomainEvent
     {
         return new self(
-            Uuid::fromString($eventId->toString()),
-            Uuid::fromString($data["paymentId"]),
-            new Type($data["type"])
+            Uuid::fromString($eventId->toString()), Uuid::fromString($data["paymentId"]), new Type($data["type"], Price::fromString($data["price"]))
         );
     }
 
@@ -57,5 +58,10 @@ final class PaymentWasPaid implements DomainEvent
     public function type(): Type
     {
         return $this->type;
+    }
+
+    public function amount() : Price
+    {
+        return $this->amount;
     }
 }

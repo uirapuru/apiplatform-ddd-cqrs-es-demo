@@ -39,9 +39,7 @@ final class PlacePaidOrderHandler
         ));
 
         $this->eventBus->dispatch(new PaymentWasPaid(
-            Uuid::uuid4(),
-            $command->voucherId(),
-            Type::CASH()
+            Uuid::uuid4(), $command->voucherId(), Type::CASH(), $price
         ));
     }
 }

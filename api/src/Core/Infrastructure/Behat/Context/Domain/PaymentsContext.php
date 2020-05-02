@@ -3,6 +3,7 @@
 namespace App\Core\Infrastructure\Behat\Context\Domain;
 
 use App\Core\Infrastructure\Behat\Service\SharedStorageInterface;
+use App\Payment\Domain\Model\Status;
 use App\Payment\Domain\Repository\PaymentRepositoryInterface;
 use App\User\Domain\Model\CustomerInterface;
 use Behat\Behat\Context\Context;
@@ -39,6 +40,6 @@ final class PaymentsContext implements Context
      */
     public function thePaymentShouldBeDone()
     {
-        Assert::eq(Status::DONE(), $this->sharedStorage->get("last_payment"));
+        Assert::eq(Status::DONE(), $this->sharedStorage->get("last_payment")->status());
     }
 }

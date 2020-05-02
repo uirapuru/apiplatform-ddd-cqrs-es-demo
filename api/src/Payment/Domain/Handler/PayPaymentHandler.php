@@ -5,12 +5,13 @@ namespace App\Payment\Domain\Handler;
 
 use App\Order\Domain\Repository\OrderRepositoryInterface;
 use App\Payment\Domain\Command\CreatePayment;
+use App\Payment\Domain\Command\PayPayment;
 use App\Payment\Domain\Model\Payment;
 use App\Payment\Domain\Repository\PaymentRepositoryInterface;
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
 
-final class CreatePaymentHandler
+final class PayPaymentHandler
 {
     private OrderRepositoryInterface $orderRepository;
     private PaymentRepositoryInterface $paymentRepository;
@@ -21,17 +22,14 @@ final class CreatePaymentHandler
         $this->paymentRepository = $paymentRepository;
     }
 
-    public function __invoke(CreatePayment $createPayment) : void
+    public function __invoke(PayPayment $payPayment) : void
     {
-        $order = $this->orderRepository->find($createPayment->orderId());
+        /** @var Payment $payment */
+        $payment = $this->paymentRepository->find($payPayment->paymentId());
 
-        Assert::notNull($order);
+        Assert::notNull($payment, 'Payment does not exist');
 
-        $payment = new Payment($createPayment->paymentId(), $order);
-
-        $order->setPayment($payment);
-
-        $this->paymentRepository->add($payment);
+        $payment->pay($payPayment->type(), $payPayment->amount());
 
 //        $this->eventBud->dispatch(new PaymentWasCreated());
     }

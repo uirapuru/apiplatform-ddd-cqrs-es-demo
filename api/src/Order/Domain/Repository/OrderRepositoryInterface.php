@@ -14,7 +14,9 @@ interface OrderRepositoryInterface
 
     public function add(Order $order): void;
 
-    public function find(UuidInterface $uuid): ?UserInterface;
+    public function find(UuidInterface $uuid): ?Order;
 
     public function remove(Order $order): void;
+
+    public function findByPaymentId(UuidInterface $paymentId) : ?Order;
 }

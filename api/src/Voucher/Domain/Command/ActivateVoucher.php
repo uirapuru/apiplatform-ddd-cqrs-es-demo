@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Order\Domain\Model\Product;
+namespace App\Voucher\Domain\Command;
 
+use App\Core\Domain\Command;
 use Ramsey\Uuid\UuidInterface;
 
-final class VoucherProduct extends Product implements OrderProductInterface
+final class ActivateVoucher implements Command
 {
     private UuidInterface $voucherId;
 
@@ -14,7 +15,7 @@ final class VoucherProduct extends Product implements OrderProductInterface
         $this->voucherId = $voucherId;
     }
 
-    public function id(): UuidInterface
+    public function voucherId(): UuidInterface
     {
         return $this->voucherId;
     }

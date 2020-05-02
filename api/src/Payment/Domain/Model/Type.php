@@ -7,8 +7,10 @@ use MyCLabs\Enum\Enum;
 
 /**
  * @method static CASH()
+ * @method static TRANSFER()
  */
 final class Type extends Enum
 {
     private const CASH = 'cash';
+    private const TRANSFER = 'tranfer';
 }
