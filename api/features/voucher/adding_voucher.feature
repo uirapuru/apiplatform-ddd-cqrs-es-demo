@@ -8,14 +8,32 @@ Feature: Adding a new voucher
     Given there is user "John Doe" registered
     And I am logged in as an administrator
 
-  Scenario: Adding a new voucher
-    When I place order for voucher
-    And I sell it to user "John Doe"
+  Scenario: Adding a new voucher paid by cash
+    When I sell it to user "John Doe"
     And I set its price to "10.00 PLN"
     And customer paid for it
-    Then I should be notified that voucher has been successfully created
+    And I add it
+    Then he should be notified that voucher has been successfully created
     And the new voucher should appear in the app
     And the new order for user "John Doe" should be created
     And it should be paid
     And the new payment for user "John Doe" should be created
     And the payment should be done.
+
+  Scenario: Adding a new voucher
+    When I sell it to user "John Doe"
+    And I set its price to "10.00 PLN"
+    And customer did not paid for it
+    And I add it
+    Then he should be notified that voucher has been successfully created
+    And the new voucher should appear in the app
+    And the new order for user "John Doe" should be created
+    And the order should be 'new' status
+    And the new payment for user "John Doe" should be created
+    And the payment should be 'waiting' status
+
+  Scenario: Paying by transfer a voucher
+    Given an order for voucher is placed for user "John Doe"
+    When customer made a payment for it
+    Then he should be notified that voucher has been successfully created
+    And voucher should be active

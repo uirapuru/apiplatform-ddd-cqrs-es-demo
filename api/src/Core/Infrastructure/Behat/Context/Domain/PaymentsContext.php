@@ -7,6 +7,7 @@ use App\Payment\Domain\Model\Status;
 use App\Payment\Domain\Repository\PaymentRepositoryInterface;
 use App\User\Domain\Model\CustomerInterface;
 use Behat\Behat\Context\Context;
+use Behat\Behat\Tester\Exception\PendingException;
 use Webmozart\Assert\Assert;
 
 final class PaymentsContext implements Context
@@ -40,6 +41,14 @@ final class PaymentsContext implements Context
      */
     public function thePaymentShouldBeDone()
     {
-        Assert::eq(Status::DONE(), $this->sharedStorage->get("last_payment")->status());
+        Assert::eq($this->sharedStorage->get("last_payment")->status(), Status::DONE());
+    }
+
+    /**
+     * @Given the payment should be :status status
+     */
+    public function thePaymentShouldBeStatus(string $status)
+    {
+        Assert::eq($this->sharedStorage->get("last_payment")->status(), new Status($status));
     }
 }

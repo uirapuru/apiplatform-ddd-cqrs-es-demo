@@ -8,6 +8,7 @@ use App\Order\Domain\Model\Status;
 use App\Order\Domain\Repository\OrderRepositoryInterface;
 use App\User\Domain\Model\CustomerInterface;
 use Behat\Behat\Context\Context;
+use Behat\Behat\Tester\Exception\PendingException;
 use Webmozart\Assert\Assert;
 
 final class OrdersContext implements Context
@@ -40,5 +41,13 @@ final class OrdersContext implements Context
     public function itShouldBePaid()
     {
         Assert::eq($this->sharedStorage->get("last_order")->status(), Status::PAID(), 'Status should be "%s" but is "%s"');
+    }
+
+    /**
+     * @Given the order should be :status status
+     */
+    public function theOrderShouldBeStatus(string $status)
+    {
+        Assert::eq($this->sharedStorage->get("last_order")->status(), new Status($status), 'Status should be "%s" but is "%s"');
     }
 }

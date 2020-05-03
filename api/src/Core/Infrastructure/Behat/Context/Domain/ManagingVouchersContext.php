@@ -3,6 +3,8 @@
 namespace App\Core\Infrastructure\Behat\Context\Domain;
 
 use App\Common\ValueObject\Price;
+use App\Core\Domain\Command\PayPayment;
+use App\Core\Domain\Command\PlaceOrderForVoucher;
 use App\Core\Infrastructure\Behat\Service\SharedStorageInterface;
 use App\Core\Domain\Command\PlacePaidOrderForVoucher;
 use App\Payment\Domain\Repository\PaymentRepositoryInterface;
@@ -15,6 +17,7 @@ use Behat\Behat\Context\Context;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Webmozart\Assert\Assert;
+use App\Payment\Domain\Model\Type as PaymentType;
 
 final class ManagingVouchersContext implements Context
 {
@@ -47,14 +50,6 @@ final class ManagingVouchersContext implements Context
     }
 
     /**
-     * @Given I add it
-     */
-    public function iAddIt()
-    {
-
-    }
-
-    /**
      * @Then I should be notified that it has been successfully created
      */
     public function iShouldBeNotifiedThatItHasBeenSuccessfullyCreated()
@@ -75,22 +70,18 @@ final class ManagingVouchersContext implements Context
     }
 
     /**
-     * @Given it should be active
+     * @Given voucher should be active
      */
     public function itShouldBeActive()
     {
         /** @var Voucher $voucher */
-        $voucher = $this->sharedStorage->get("last_voucher");
+        $voucher = $this->voucherRepository->find(
+            $this->sharedStorage->get("last_voucher_id")
+        );
+
         Assert::true($voucher->isActive());
     }
 
-    /**
-     * @When /^I place order for voucher$/
-     */
-    public function iPlaceOrderForVoucher()
-    {
-
-    }
 
     /**
      * @Given I sell it to user :user
@@ -102,7 +93,7 @@ final class ManagingVouchersContext implements Context
     }
 
     /**
-     * @Then /^I should be notified that voucher has been successfully created$/
+     * @Then he should be notified that voucher has been successfully created
      */
     public function iShouldBeNotifiedThatVoucherHasBeenSuccessfullyCreated()
     {
@@ -114,17 +105,60 @@ final class ManagingVouchersContext implements Context
      */
     public function customerPaidForIt()
     {
-        $voucherId = Uuid::uuid4();
-
-        $price = $this->sharedStorage->get("sell_price");
-
-        $this->commandBus->dispatch(new PlacePaidOrderForVoucher(
-            $voucherId,
+        $this->sharedStorage->set("order_for_voucher", new PlacePaidOrderForVoucher(
+            $voucherId = Uuid::uuid4(),
             $this->sharedStorage->get('sell_to')->id(),
             Type::OPEN(),
-            $price
+            $this->sharedStorage->get("sell_price")
         ));
 
         $this->sharedStorage->set("last_voucher_id", $voucherId);
+    }
+
+    /**
+     * @Given customer did not paid for it
+     */
+    public function customerDidNotPaidForIt()
+    {
+        $this->sharedStorage->set("order_for_voucher", new PlaceOrderForVoucher(
+            $voucherId = Uuid::uuid4(),
+            $this->sharedStorage->get('sell_to')->id(),
+            Type::OPEN(),
+            $this->sharedStorage->get("sell_price")
+        ));
+
+        $this->sharedStorage->set("last_voucher_id", $voucherId);
+    }
+
+    /**
+     * @Given /^I add it$/
+     */
+    public function iAddIt()
+    {
+        $this->commandBus->dispatch($this->sharedStorage->get("order_for_voucher"));
+    }
+
+    /**
+     * @Given an order for voucher is placed for user :user
+     */
+    public function anOrderForVoucherIsPlacedForUser(CustomerInterface $user)
+    {
+        $this->sharedStorage->set("sell_price", $price = Price::fromString("10 PLN"));
+        $this->sharedStorage->set("sell_to", $user);
+
+        $this->customerDidNotPaidForIt();
+        $this->iAddIt();
+    }
+
+    /**
+     * @When /^customer made a payment for it$/
+     */
+    public function customerMadeAPaymentForIt()
+    {
+        $this->commandBus->dispatch(new PayPayment(
+            $this->sharedStorage->get("last_voucher_id"),
+            PaymentType::TRANSFER(),
+            $this->sharedStorage->get("sell_price")
+        ));
     }
 }

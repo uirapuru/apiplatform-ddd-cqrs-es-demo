@@ -74,7 +74,7 @@ final class Voucher
         $this->entries[] =  $entry;
     }
 
-    public function isActive() : bool // @todo implement
+    public function isActive() : bool
     {
         return $this->active;
     }
