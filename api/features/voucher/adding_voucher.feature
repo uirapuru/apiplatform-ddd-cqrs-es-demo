@@ -20,7 +20,7 @@ Feature: Adding a new voucher
     And the new payment for user "John Doe" should be created
     And the payment should be done.
 
-  Scenario: Adding a new voucher
+  Scenario: Adding a new voucher without paying it
     When I sell it to user "John Doe"
     And I set its price to "10.00 PLN"
     And customer did not paid for it
@@ -31,6 +31,7 @@ Feature: Adding a new voucher
     And the order should be 'new' status
     And the new payment for user "John Doe" should be created
     And the payment should be 'waiting' status
+    And voucher should not be active
 
   Scenario: Paying by transfer a voucher
     Given an order for voucher is placed for user "John Doe"

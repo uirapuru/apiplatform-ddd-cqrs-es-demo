@@ -1,0 +1,5 @@
+default:
+  suites:
+    domain_managing_vouchers:
+      contexts:
+        - App\Core\Infrastructure\Behat\Context\Domain\EntryContext

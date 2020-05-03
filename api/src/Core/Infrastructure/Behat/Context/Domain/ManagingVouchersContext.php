@@ -87,7 +87,6 @@ final class ManagingVouchersContext implements Context
 
     /**
      * @Given I sell it to user :user
-     *
      */
     public function iSellItToUser(CustomerInterface $user) : void
     {

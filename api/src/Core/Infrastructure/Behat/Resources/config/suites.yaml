@@ -1,2 +1,3 @@
 imports:
   - ./suites/domain/voucher.yaml
+  - ./suites/domain/entry.yaml
