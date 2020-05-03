@@ -5,6 +5,8 @@ namespace App\Core\Domain\Saga;
 
 use App\Core\Domain\Event\OrderForVoucherPlaced;
 use App\Core\Infrastructure\Storage\ProcessRepositoryInterface;
+use App\Notification\Notifier;
+use App\Notification\Type as NotificationType;
 use App\Order\Domain\Command\CreateOrder;
 use App\Order\Domain\Command\FinishOrder;
 use App\Order\Domain\Model\Product\Product;
@@ -23,28 +25,20 @@ use Symfony\Component\Workflow\Registry;
 
 final class VoucherProcessManager implements ProcessManagerInterface
 {
-    private UuidInterface $processId;
-
-    use HandlesDomainEvents, HasState;
+    use HandlesDomainEvents;
 
     private MessageBusInterface $commandBus;
     private MessageBusInterface $eventBus;
     private OrderRepositoryInterface $orderRepository;
-    private ProcessRepositoryInterface $processRepository;
+    private Notifier $notifier;
 
-    public function __construct(MessageBusInterface $commandBus, MessageBusInterface $eventBus, Registry $workflowRegistry, OrderRepositoryInterface $orderRepository, ProcessRepositoryInterface $processRepository)
+    public function __construct(MessageBusInterface $commandBus, MessageBusInterface $eventBus, Registry $workflowRegistry, OrderRepositoryInterface $orderRepository, ProcessRepositoryInterface $processRepository, \App\Notification\Notifier $notifier)
     {
         $this->commandBus = $commandBus;
         $this->eventBus = $eventBus;
         $this->orderRepository = $orderRepository;
         $this->processRepository = $processRepository;
-
-        $this->workflow = $workflowRegistry->get($this);
-    }
-
-    public function processId(): UuidInterface
-    {
-        return $this->processId;
+        $this->notifier = $notifier;
     }
 
     public function handleThatOrderForVoucherPlaced(OrderForVoucherPlaced $orderForVoucherPlaced) : void
@@ -52,8 +46,6 @@ final class VoucherProcessManager implements ProcessManagerInterface
         $orderId = Uuid::fromString($orderForVoucherPlaced->orderId());
         $customerId = Uuid::fromString($orderForVoucherPlaced->customerId());
         $voucherId = Uuid::fromString($orderForVoucherPlaced->voucherId());
-
-        $this->processId = $orderId;
 
         $this->commandBus->dispatch(new CreateOrder($orderId, $customerId, [
             Product::voucher($voucherId)
@@ -70,9 +62,7 @@ final class VoucherProcessManager implements ProcessManagerInterface
             $orderForVoucherPlaced->entriesAmount(),
         ));
 
-        $this->workflow->apply($this, 'place_order', $orderForVoucherPlaced->toArray());
-
-        $this->processRepository->add($this);
+        $this->notifier->notify('Voucher created', NotificationType::SUCCESS());
     }
 
     public function handleThatPaymentWasPaid(PaymentWasPaid $paymentWasPaid) : void
@@ -93,7 +83,7 @@ final class VoucherProcessManager implements ProcessManagerInterface
             $this->commandBus->dispatch(new ActivateVoucher($voucherId));
         }
 
-        $this->workflow->apply($this, 'pay', $paymentWasPaid->toArray());
+        $this->notifier->notify('Voucher paid', NotificationType::SUCCESS());
     }
 
     public function handleThatPaymentWasRejected(PaymentWasRejected $paymentWasPaid) : void

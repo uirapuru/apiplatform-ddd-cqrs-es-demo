@@ -93,14 +93,6 @@ final class ManagingVouchersContext implements Context
     }
 
     /**
-     * @Then he should be notified that voucher has been successfully created
-     */
-    public function iShouldBeNotifiedThatVoucherHasBeenSuccessfullyCreated()
-    {
-
-    }
-
-    /**
      * @Given /^customer paid for it$/
      */
     public function customerPaidForIt()

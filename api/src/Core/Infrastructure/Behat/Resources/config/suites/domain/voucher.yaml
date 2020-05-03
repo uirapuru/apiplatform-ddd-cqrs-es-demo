@@ -5,7 +5,7 @@ default:
         - App\Core\Infrastructure\Behat\Context\Transform\UserContext
         - App\Core\Infrastructure\Behat\Context\Setup\AdminSecurityContext
         - App\Core\Infrastructure\Behat\Context\Setup\MemberContext
-        - App\Core\Infrastructure\Behat\Context\Hook\DoctrineORMContext
         - App\Core\Infrastructure\Behat\Context\Domain\ManagingVouchersContext
         - App\Core\Infrastructure\Behat\Context\Domain\PaymentsContext
         - App\Core\Infrastructure\Behat\Context\Domain\OrdersContext
+        - App\Core\Infrastructure\Behat\Context\Domain\NotificationContext
