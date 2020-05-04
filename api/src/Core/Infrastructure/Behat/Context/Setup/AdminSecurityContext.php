@@ -8,8 +8,10 @@ use App\Core\Infrastructure\Behat\Service\SharedStorageInterface;
 use App\User\Domain\Model\Admin;
 use App\User\Domain\Model\EmailAddress;
 use App\User\Domain\Model\FullName;
+use App\User\Domain\Model\Manager;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use Behat\Behat\Context\Context;
+use Behat\Behat\Tester\Exception\PendingException;
 use Webmozart\Assert\Assert;
 
 final class AdminSecurityContext implements Context
@@ -74,5 +76,25 @@ final class AdminSecurityContext implements Context
         $this->securityService->logOut();
 
         $this->sharedStorage->set('administrator', null);
+    }
+
+    /**
+     * @Given I am logged in as an employee
+     */
+    public function iAmLoggedInAsAnEmployee()
+    {
+        $employee = Manager::create(
+            'manager',
+            FullName::create("john", "doe"),
+            EmailAddress::create("manager@manager.pl"),
+            "password",
+            "salt"
+        );
+
+        $this->userRepository->add($employee);
+
+        $this->securityService->logIn($employee);
+
+        $this->sharedStorage->set('manager', $employee);
     }
 }

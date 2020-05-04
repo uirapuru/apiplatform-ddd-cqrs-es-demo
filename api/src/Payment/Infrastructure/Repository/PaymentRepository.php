@@ -3,10 +3,16 @@ declare(strict_types=1);
 
 namespace App\Payment\Infrastructure\Repository;
 
+use App\Common\Traits\HasEntityManager;
 use App\Payment\Domain\Repository\PaymentRepositoryInterface;
-use Doctrine\ORM\EntityRepository;
+use App\User\Domain\Model\CustomerInterface;
 
-class PaymentRepository extends EntityRepository implements PaymentRepositoryInterface
+final class PaymentRepository implements PaymentRepositoryInterface
 {
+    use HasEntityManager;
 
+    public function findByUser(CustomerInterface $user)
+    {
+        // TODO: Implement findByUser() method.
+    }
 }

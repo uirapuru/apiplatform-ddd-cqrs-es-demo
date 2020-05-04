@@ -1,5 +1,9 @@
 default:
   suites:
-    domain_managing_vouchers:
+    domain_managing_entries:
       contexts:
         - App\Core\Infrastructure\Behat\Context\Domain\EntryContext
+        - App\Core\Infrastructure\Behat\Context\Setup\MemberContext
+
+      filters:
+        tags: "@managing_entries && @domain"

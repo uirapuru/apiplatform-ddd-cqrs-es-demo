@@ -7,7 +7,7 @@ use Ramsey\Uuid\UuidInterface;
 
 interface VoucherRepositoryInterface
 {
-    public function add(Voucher $user) : void;
+    public function add(Voucher $voucher) : void;
 
     public function find(UuidInterface $uuid) : ?Voucher;
 }

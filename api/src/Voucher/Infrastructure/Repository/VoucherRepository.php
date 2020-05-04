@@ -23,8 +23,8 @@ final class VoucherRepository implements VoucherRepositoryInterface
         return $this->em->getRepository(Voucher::class)->find($uuid);
     }
 
-    public function add(Voucher $user): void
+    public function add(Voucher $voucher): void
     {
-        $this->em->persist($user);
+        $this->em->persist($voucher);
     }
 }

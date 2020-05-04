@@ -7,14 +7,8 @@ services:
     App\Core\Infrastructure\Behat\:
         resource: '../src/Core/Infrastructure/Behat/**/*'
 
-    App\Voucher\Domain\Repository\VoucherRepositoryInterface:
-        class: App\Voucher\Infrastructure\Repository\InMemoryVoucherRepository
-
-    App\User\Domain\Repository\UserRepositoryInterface:
-        class: App\User\Infrastructure\Repository\InMemoryUserRepository
-
-    App\Order\Domain\Repository\OrderRepositoryInterface:
-        class: App\Order\Infrastructure\Repository\InMemoryOrderRepository
-
-    App\Payment\Domain\Repository\PaymentRepositoryInterface:
-        class: App\Payment\Infrastructure\Repository\InMemoryPaymentRepository
+    App\Activity\Domain\Repository\ActivityRepositoryInterface: '@App\Activity\Infrastructure\Repository\InMemoryActivityRepository'
+    App\Order\Domain\Repository\OrderRepositoryInterface:       '@App\Order\Infrastructure\Repository\InMemoryOrderRepository'
+    App\Payment\Domain\Repository\PaymentRepositoryInterface:   '@App\Payment\Infrastructure\Repository\InMemoryPaymentRepository'
+    App\User\Domain\Repository\UserRepositoryInterface:         '@App\User\Infrastructure\Repository\InMemoryUserRepository'
+    App\Voucher\Domain\Repository\VoucherRepositoryInterface:   '@App\Voucher\Infrastructure\Repository\InMemoryVoucherRepository'

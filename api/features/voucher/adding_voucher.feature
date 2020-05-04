@@ -1,4 +1,4 @@
-@voucher
+@managing_vouchers
 Feature: Adding a new voucher
   In order to let member enter activities
   As an Administrator
@@ -8,6 +8,7 @@ Feature: Adding a new voucher
     Given there is user "John Doe" registered
     And I am logged in as an administrator
 
+  @domain
   Scenario: Adding a new voucher paid by cash
     When I sell it to user "John Doe"
     And I set its price to "10.00 PLN"
@@ -20,6 +21,7 @@ Feature: Adding a new voucher
     And the new payment for user "John Doe" should be created
     And the payment should be done.
 
+  @domain
   Scenario: Adding a new voucher without paying it
     When I sell it to user "John Doe"
     And I set its price to "10.00 PLN"
@@ -33,6 +35,7 @@ Feature: Adding a new voucher
     And the payment should be 'waiting' status
     And voucher should not be active
 
+  @domain
   Scenario: Paying by transfer a voucher
     Given an order for voucher is placed for user "John Doe"
     When customer made a payment for it

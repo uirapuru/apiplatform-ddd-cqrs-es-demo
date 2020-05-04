@@ -9,3 +9,6 @@ default:
         - App\Core\Infrastructure\Behat\Context\Domain\PaymentsContext
         - App\Core\Infrastructure\Behat\Context\Domain\OrdersContext
         - App\Core\Infrastructure\Behat\Context\Domain\NotificationContext
+
+      filters:
+        tags: "@managing_vouchers && @domain"

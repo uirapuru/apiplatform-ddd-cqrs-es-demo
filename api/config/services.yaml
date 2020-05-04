@@ -6,11 +6,12 @@ services:
         bind:
             $commandBus: '@command.bus'
             $eventBus:   '@event.bus'
+#            $now:        '@DateTimeImmutable'
 
     App\:
         resource: '../src/**/*'
         exclude:
-            - '../src/**/*/{*Controller.php,DependencyInjection,Model,Repository,Resources,Kernel.php}'
+            - '../src/**/*/{*Controller.php,DependencyInjection,Model,Resources,Kernel.php}'
             - '../src/Core/*'
             - '../src/**/*/{Handler}'
 
@@ -42,7 +43,7 @@ services:
         
     App\Voucher\Domain\Repository\VoucherRepositoryInterface:   '@App\Voucher\Infrastructure\Repository\VoucherRepository'
     App\User\Domain\Repository\UserRepositoryInterface:         '@App\User\Infrastructure\Repository\UserRepository'
-    App\Payment\Domain\Repository\PaymentRepositoryInterface:   '@App\Payment\Domain\Repository\PaymentRepository'
-    App\Order\Domain\Repository\OrderRepositoryInterface:       '@App\Order\Domain\Repository\OrderRepository'
+    App\Payment\Domain\Repository\PaymentRepositoryInterface:   '@App\Payment\Infrastructure\Repository\PaymentRepository'
+    App\Order\Domain\Repository\OrderRepositoryInterface:       '@App\Order\Infrastructure\Repository\OrderRepository'
     App\Core\Infrastructure\Storage\ProcessRepositoryInterface: '@App\Core\Infrastructure\Storage\InMemoryProcessRepository'
 

@@ -11,9 +11,9 @@ class InMemoryVoucherRepository implements VoucherRepositoryInterface
 {
     private array $vouchers = [];
 
-    public function add(Voucher $user): void
+    public function add(Voucher $voucher): void
     {
-        $this->vouchers[$user->id()->toString()] = $user;
+        $this->vouchers[$voucher->id()->toString()] = $voucher;
     }
 
     public function remove(Voucher $voucher): void
