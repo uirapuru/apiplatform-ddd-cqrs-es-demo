@@ -18,7 +18,7 @@ final class Voucher
     private ?DateTimeImmutable $startDate;
     private ?DateTimeImmutable $endDate;
     private ?int $maximumAmount;
-    private DateTimeImmutable $closedAt;
+    private ?DateTimeImmutable $closedAt = null;
     private Type $type;
     /**
      * @var Entry[]
@@ -88,7 +88,7 @@ final class Voucher
 
     public function isClosed() : bool
     {
-        return is_null($this->closedAt) === false;
+        return false === is_null($this->closedAt);
     }
 
     public function close() : void

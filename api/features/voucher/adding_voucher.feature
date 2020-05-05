@@ -33,7 +33,8 @@ Feature: Adding a new voucher
     And the order should be 'new' status
     And the new payment for user "John Doe" should be created
     And the payment should be 'waiting' status
-    And voucher should not be active
+    And voucher should be inactive
+    And voucher should not be closed
 
   @domain
   Scenario: Paying by transfer a voucher
@@ -42,6 +43,7 @@ Feature: Adding a new voucher
     Then he should be notified that voucher has been successfully created
     And voucher should be active
 
+  @domain
   Scenario: Rejecting a payment
     Given an order for voucher is placed for user "John Doe"
     And the new order for user "John Doe" should be created

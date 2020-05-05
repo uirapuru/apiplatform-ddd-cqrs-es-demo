@@ -190,4 +190,17 @@ final class ManagingVouchersContext implements Context
 
         Assert::true($voucher->isClosed());
     }
+
+    /**
+     * @Given /^voucher should not be closed$/
+     */
+    public function voucherShouldNotBeClosed()
+    {
+        /** @var Voucher $voucher */
+        $voucher = $this->voucherRepository->find(
+            $this->sharedStorage->get("last_voucher_id")
+        );
+
+        Assert::false($voucher->isClosed());
+    }
 }
