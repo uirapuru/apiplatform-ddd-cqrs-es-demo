@@ -5,7 +5,7 @@ namespace App\Core\Domain\Handler;
 
 use App\Core\Domain\Command\PlacePaidOrderForVoucher;
 use App\Core\Domain\Event\OrderForVoucherPlaced;
-use App\Payment\Domain\Event\PaymentWasPaid;
+use App\Core\Domain\Event\PaymentWasPaid;
 use App\Payment\Domain\Model\Type;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\MessageBusInterface;

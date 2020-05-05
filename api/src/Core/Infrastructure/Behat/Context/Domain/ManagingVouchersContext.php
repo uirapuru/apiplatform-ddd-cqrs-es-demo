@@ -5,6 +5,7 @@ namespace App\Core\Infrastructure\Behat\Context\Domain;
 use App\Common\ValueObject\Price;
 use App\Core\Domain\Command\PayPayment;
 use App\Core\Domain\Command\PlaceOrderForVoucher;
+use App\Core\Domain\Command\RejectPayment;
 use App\Core\Infrastructure\Behat\Service\SharedStorageInterface;
 use App\Core\Domain\Command\PlacePaidOrderForVoucher;
 use App\Payment\Domain\Repository\PaymentRepositoryInterface;
@@ -14,6 +15,7 @@ use App\Voucher\Domain\Model\Type;
 use App\Voucher\Domain\Model\Voucher;
 use App\Voucher\Domain\Repository\VoucherRepositoryInterface;
 use Behat\Behat\Context\Context;
+use Behat\Behat\Tester\Exception\PendingException;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Webmozart\Assert\Assert;
@@ -152,5 +154,41 @@ final class ManagingVouchersContext implements Context
             PaymentType::TRANSFER(),
             $this->sharedStorage->get("sell_price")
         ));
+    }
+
+    /**
+     * @When /^customer rejects the payment$/
+     */
+    public function customerRejectsThePayment()
+    {
+        $this->commandBus->dispatch(new RejectPayment(
+            $this->sharedStorage->get("last_voucher_id")
+        ));
+    }
+
+    /**
+     * @Given /^voucher should be inactive$/
+     */
+    public function voucherShouldBeInactive()
+    {
+        /** @var Voucher $voucher */
+        $voucher = $this->voucherRepository->find(
+            $this->sharedStorage->get("last_voucher_id")
+        );
+
+        Assert::false($voucher->isActive());
+    }
+
+    /**
+     * @Given /^voucher should be closed$/
+     */
+    public function voucherShouldBeClosed()
+    {
+        /** @var Voucher $voucher */
+        $voucher = $this->voucherRepository->find(
+            $this->sharedStorage->get("last_voucher_id")
+        );
+
+        Assert::true($voucher->isClosed());
     }
 }

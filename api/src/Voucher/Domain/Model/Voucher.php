@@ -84,4 +84,9 @@ final class Voucher
         $this->active = true;
         $this->updatedAt = new DateTimeImmutable();
     }
+
+    public function isClosed() : bool
+    {
+        return true;
+    }
 }

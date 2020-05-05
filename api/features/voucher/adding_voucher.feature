@@ -37,3 +37,12 @@ Feature: Adding a new voucher
     When customer made a payment for it
     Then he should be notified that voucher has been successfully created
     And voucher should be active
+
+  Scenario: Rejecting a payment
+    Given an order for voucher is placed for user "John Doe"
+    When customer rejects the payment
+    Then he should be notified that voucher has been rejected
+    And voucher should be inactive
+    And voucher should be closed
+    And the order should be 'rejected' status
+    And the payment should be 'rejected' status

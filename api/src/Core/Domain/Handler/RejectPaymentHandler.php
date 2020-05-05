@@ -3,13 +3,12 @@ declare(strict_types=1);
 
 namespace App\Core\Domain\Handler;
 
-use App\Core\Domain\Command\PayPayment;
-use App\Core\Domain\Event\PaymentWasPaid;
+use App\Core\Domain\Command\RejectPayment;
+use App\Core\Domain\Event\PaymentWasRejected;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-
-final class PayPaymentHandler
+final class RejectPaymentHandler
 {
     private MessageBusInterface $eventBus;
 
@@ -18,13 +17,11 @@ final class PayPaymentHandler
         $this->eventBus = $eventBus;
     }
 
-    public function __invoke(PayPayment $payPayment)
+    public function __invoke(RejectPayment $payPayment)
     {
-        $this->eventBus->dispatch(new PaymentWasPaid(
+        $this->eventBus->dispatch(new PaymentWasRejected(
             Uuid::uuid4(),
             $payPayment->paymentId(),
-            $payPayment->type(),
-            $payPayment->amount()
         ));
     }
 }

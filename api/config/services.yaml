@@ -34,7 +34,8 @@ services:
     App\Core\Domain\Saga\VoucherProcessManager:
         tags:
             - { name: messenger.message_handler, bus: event.bus, handles: App\Core\Domain\Event\OrderForVoucherPlaced }
-            - { name: messenger.message_handler, bus: event.bus, handles: App\Payment\Domain\Event\PaymentWasPaid }
+            - { name: messenger.message_handler, bus: event.bus, handles: App\Core\Domain\Event\PaymentWasRejected }
+            - { name: messenger.message_handler, bus: event.bus, handles: App\Core\Domain\Event\PaymentWasPaid }
 
     DateTimeImmutable:
         class: \DateTimeImmutable

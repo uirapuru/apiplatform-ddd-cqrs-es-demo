@@ -9,12 +9,15 @@ use App\Notification\Notifier;
 use App\Notification\Type as NotificationType;
 use App\Order\Domain\Command\CreateOrder;
 use App\Order\Domain\Command\FinishOrder;
+use App\Order\Domain\Command\RejectOrder;
 use App\Order\Domain\Model\Product\Product;
 use App\Order\Domain\Model\Product\VoucherProduct;
 use App\Order\Domain\Repository\OrderRepositoryInterface;
 use App\Payment\Domain\Command\CreatePayment;
 use App\Payment\Domain\Command\PayPayment;
-use App\Payment\Domain\Event\PaymentWasPaid;
+use App\Payment\Domain\Command\RejectPayment;
+use App\Core\Domain\Event\PaymentWasPaid;
+use App\Core\Domain\Event\PaymentWasRejected;
 use App\Voucher\Domain\Command\ActivateVoucher;
 use App\Voucher\Domain\Command\CreateVoucher;
 use App\Voucher\Domain\Model\Type;
@@ -86,14 +89,24 @@ final class VoucherProcessManager implements ProcessManagerInterface
         $this->notifier->notify('Voucher paid', NotificationType::SUCCESS());
     }
 
-    public function handleThatPaymentWasRejected(PaymentWasRejected $paymentWasPaid) : void
+    public function handleThatPaymentWasRejected(PaymentWasRejected $paymentWasRejected) : void
     {
+        $paymentId = $paymentWasRejected->paymentId();
+
+        $order = $this->orderRepository->findByPaymentId($paymentId);
+
+        $vouchers = array_map(fn(VoucherProduct $voucherProduct) : UuidInterface => $voucherProduct->id(),
+            array_filter($order->products(), fn(Product $product) : bool => $product instanceof VoucherProduct)
+        );
+
         $this->commandBus->dispatch(new RejectPayment($paymentId));
 
-        $this->commandBus->dispatch(new RejectOrder($orderId));
+        $this->commandBus->dispatch(new RejectOrder($order->id()));
 
-        $this->commandBus->dispatch(new CloseVoucher($voucherId));
+        foreach($vouchers as $voucherId) {
+            $this->commandBus->dispatch(new ActivateVoucher($voucherId));
+        }
 
-        $this->workflow->apply($this, 'reject_payment', $paymentWasPaid->toArray());
+        $this->notifier->notify('Payment for voucher was rejected', NotificationType::INFO());
     }
 }

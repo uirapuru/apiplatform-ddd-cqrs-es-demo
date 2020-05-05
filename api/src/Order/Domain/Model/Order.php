@@ -33,13 +33,7 @@ final class Order
         return $this->customer;
     }
 
-    public function markPaid() : void
-    {
-        $this->status = Status::PAID();
-        $this->updatedAt = new DateTimeImmutable();
-    }
-
-    public function markRejected() : void
+    public function reject() : void
     {
         $this->status = Status::REJECTED();
         $this->updatedAt = new DateTimeImmutable();
@@ -61,7 +55,7 @@ final class Order
         $this->updatedAt = new DateTimeImmutable();
     }
 
-    public function finish() : void
+    public function pay() : void
     {
         $this->status = Status::PAID();
         $this->updatedAt = new DateTimeImmutable();

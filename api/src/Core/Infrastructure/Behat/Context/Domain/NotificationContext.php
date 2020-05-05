@@ -6,6 +6,7 @@ namespace App\Core\Infrastructure\Behat\Context\Domain;
 use App\Core\Infrastructure\Behat\Service\NotificationCheckerInterface;
 use App\Notification\Type;
 use Behat\Behat\Context\Context;
+use Behat\Behat\Tester\Exception\PendingException;
 
 final class NotificationContext implements Context
 {
@@ -24,6 +25,17 @@ final class NotificationContext implements Context
         $this->checker->checkNotification(
             'Voucher created',
             Type::SUCCESS()
+        );
+    }
+
+    /**
+     * @Then he should be notified that voucher has been rejected
+     */
+    public function heShouldBeNotifiedThatVoucherHasBeenRejected()
+    {
+        $this->checker->checkNotification(
+            'Payment for voucher was rejected',
+            Type::INFO()
         );
     }
 }

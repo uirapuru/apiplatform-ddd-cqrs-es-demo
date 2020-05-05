@@ -45,4 +45,10 @@ final class Payment
     {
         return $this->status;
     }
+
+    public function reject() : void
+    {
+        $this->status = Status::REJECTED();
+        $this->updatedAt = new \DateTimeImmutable();
+    }
 }

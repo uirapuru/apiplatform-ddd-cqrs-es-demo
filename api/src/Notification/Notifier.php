@@ -12,7 +12,7 @@ final class Notifier
         $this->adapter = $adapter;
     }
 
-    public function notify(string $message, Type $type)
+    public function notify(string $message, Type $type) : void
     {
         $this->adapter->notify($message, $type);
     }

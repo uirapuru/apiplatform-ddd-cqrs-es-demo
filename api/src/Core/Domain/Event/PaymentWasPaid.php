@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Payment\Domain\Event;
+namespace App\Core\Domain\Event;
 
 use App\Common\ValueObject\Price;
 use App\Core\Domain\DomainEvent;
