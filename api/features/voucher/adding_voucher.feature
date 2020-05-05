@@ -40,6 +40,8 @@ Feature: Adding a new voucher
 
   Scenario: Rejecting a payment
     Given an order for voucher is placed for user "John Doe"
+    And the new order for user "John Doe" should be created
+    And the new payment for user "John Doe" should be created
     When customer rejects the payment
     Then he should be notified that voucher has been rejected
     And voucher should be inactive

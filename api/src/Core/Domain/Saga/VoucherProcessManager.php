@@ -20,6 +20,7 @@ use App\Core\Domain\Event\PaymentWasPaid;
 use App\Core\Domain\Event\PaymentWasRejected;
 use App\Voucher\Domain\Command\ActivateVoucher;
 use App\Voucher\Domain\Command\CreateVoucher;
+use App\Voucher\Domain\Command\RejectVoucher;
 use App\Voucher\Domain\Model\Type;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
@@ -104,7 +105,7 @@ final class VoucherProcessManager implements ProcessManagerInterface
         $this->commandBus->dispatch(new RejectOrder($order->id()));
 
         foreach($vouchers as $voucherId) {
-            $this->commandBus->dispatch(new ActivateVoucher($voucherId));
+            $this->commandBus->dispatch(new RejectVoucher($voucherId));
         }
 
         $this->notifier->notify('Payment for voucher was rejected', NotificationType::INFO());

@@ -45,10 +45,11 @@ final class Voucher
         $this->endDate = $endDate;
         $this->maximumAmount = $maximumAmount;
         $this->entries = $entries;
+        $this->customer = $customer;
+        $this->active = false;
 
         $this->createdAt = new DateTimeImmutable("now");
         $this->updatedAt = new DateTimeImmutable("now");
-        $this->customer = $customer;
     }
 
     public static function create(
@@ -87,6 +88,11 @@ final class Voucher
 
     public function isClosed() : bool
     {
-        return true;
+        return is_null($this->closedAt) === false;
+    }
+
+    public function close() : void
+    {
+        $this->closedAt = new DateTimeImmutable();
     }
 }
