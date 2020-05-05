@@ -45,5 +45,3 @@ services:
     App\User\Domain\Repository\UserRepositoryInterface:         '@App\User\Infrastructure\Repository\UserRepository'
     App\Payment\Domain\Repository\PaymentRepositoryInterface:   '@App\Payment\Infrastructure\Repository\PaymentRepository'
     App\Order\Domain\Repository\OrderRepositoryInterface:       '@App\Order\Infrastructure\Repository\OrderRepository'
-    App\Core\Infrastructure\Storage\ProcessRepositoryInterface: '@App\Core\Infrastructure\Storage\InMemoryProcessRepository'
-
