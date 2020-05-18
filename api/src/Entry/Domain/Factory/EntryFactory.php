@@ -1,47 +1,23 @@
 <?php
 
-namespace App\Entry\Factory;
+namespace App\Entry\Domain\Factory;
 
 use App\Common\Enum\EntryType;
 use App\Common\ValueObject\Price;
-use App\Entry\Entity\Entry;
-use App\Voucher\Entity\Voucher;
+use App\Entry\Domain\Model\Entry;
+use App\Voucher\Domain\Model\Voucher;
 use DateTimeImmutable;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
 class EntryFactory
 {
-    /**
-     * @var UuidInterface
-     */
-    private $id;
-
-
-    /**
-     * @var DateTimeImmutable
-     */
-    protected $startDate;
-
-    /**
-     * @var DateTimeImmutable
-     */
-    protected $endDate;
-
-    /**
-     * @var Price $price
-     */
-    protected $price;
-
-    /**
-     * @var EntryType
-     */
-    protected $type;
-
-    /**
-     * @var Voucher
-     */
-    protected $voucher;
+    private UuidInterface $id;
+    private DateTimeImmutable $startDate;
+    private DateTimeImmutable $endDate;
+    private Price $price;
+    private EntryType $type;
+    private Voucher $voucher;
 
     public static function create() : self
     {
@@ -77,7 +53,8 @@ class EntryFactory
             $this->endDate,
             $this->type,
             $this->price,
-            $this->voucher
+            $this->voucher,
+            null
         );
     }
 }

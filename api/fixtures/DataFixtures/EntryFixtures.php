@@ -2,8 +2,8 @@
 
 namespace App\DataFixtures;
 
-use App\Entry\Factory\EntryFactory;
-use App\Voucher\Entity\Voucher;
+use App\Entry\Domain\Factory\EntryFactory;
+use App\Voucher\Domain\Model\Voucher;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;

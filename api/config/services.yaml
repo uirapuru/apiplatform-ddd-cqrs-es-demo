@@ -6,7 +6,8 @@ services:
         bind:
             $commandBus: '@command.bus'
             $eventBus:   '@event.bus'
-#            $now:        '@DateTimeImmutable'
+            $queryBus:   '@query.bus'
+            $now:        '@DateTimeImmutable'
 
     App\:
         resource: '../src/**/*'
@@ -38,6 +39,14 @@ services:
             - { name: messenger.message_handler, bus: event.bus, handles: App\Core\Domain\Event\PaymentWasRejected }
             - { name: messenger.message_handler, bus: event.bus, handles: App\Core\Domain\Event\PaymentWasPaid }
 
+    App\Core\Domain\Saga\EntryProcessManager:
+        tags:
+            - { name: messenger.message_handler, bus: event.bus, handles: App\Core\Domain\Event\ActivityWasEntered }
+
+    App\Voucher\Domain\Handler\CurrentVoucherHandler:
+        tags:
+            - { name: messenger.message_handler, bus: query.bus, handles: App\Voucher\Domain\Query\CurrentVoucher }
+
     DateTimeImmutable:
         class: \DateTimeImmutable
         
@@ -45,3 +54,4 @@ services:
     App\User\Domain\Repository\UserRepositoryInterface:         '@App\User\Infrastructure\Repository\UserRepository'
     App\Payment\Domain\Repository\PaymentRepositoryInterface:   '@App\Payment\Infrastructure\Repository\PaymentRepository'
     App\Order\Domain\Repository\OrderRepositoryInterface:       '@App\Order\Infrastructure\Repository\OrderRepository'
+    App\Entry\Domain\Repository\EntryRepositoryInterface:       '@App\Entry\Infrastructure\Repository\EntryRepository'

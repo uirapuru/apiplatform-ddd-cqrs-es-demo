@@ -29,7 +29,7 @@ final class MemberContext implements Context
     }
 
     /**
-     * @Given /^there is user "([^"]*)" registered$/
+     * @Given there is user :fullname registered
      */
     public function thereIsMemberRegistered(string $fullname)
     {

@@ -10,6 +10,7 @@ use App\Core\Infrastructure\Behat\Service\SharedStorageInterface;
 use App\Core\Domain\Command\PlacePaidOrderForVoucher;
 use App\Payment\Domain\Repository\PaymentRepositoryInterface;
 use App\User\Domain\Model\CustomerInterface;
+use App\User\Domain\Model\UserInterface;
 use App\User\Domain\Repository\UserRepositoryInterface;
 use App\Voucher\Domain\Model\Type;
 use App\Voucher\Domain\Model\Voucher;
@@ -192,7 +193,7 @@ final class ManagingVouchersContext implements Context
     }
 
     /**
-     * @Given /^voucher should not be closed$/
+     * @Given voucher should not be closed
      */
     public function voucherShouldNotBeClosed()
     {
@@ -202,5 +203,15 @@ final class ManagingVouchersContext implements Context
         );
 
         Assert::false($voucher->isClosed());
+    }
+
+    /**
+     * @Given :user has no voucher
+     */
+    public function hasNoVoucher(CustomerInterface $user)
+    {
+        $vouchers = $this->voucherRepository->findByMember($user);
+
+        Assert::count($vouchers, 0);
     }
 }

@@ -4,3 +4,4 @@ framework:
         buses:
             command.bus: null
             event.bus: null
+            query.bus: null

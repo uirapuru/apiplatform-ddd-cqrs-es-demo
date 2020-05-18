@@ -9,6 +9,10 @@ Feature: Adding a new entry
     And I am logged in as an employee
     And activity "Salsa" at "19:00" is added
 
-#  @domain
-#  Scenario: Adding a new voucher for user with no voucher
-#    When
+  @domain
+  Scenario: Adding a new voucher for user with no voucher
+    Given "John Doe" has no voucher
+    When "John Doe" enters "Salsa"
+    Then entry is added
+    And created entry is "credit" type
+

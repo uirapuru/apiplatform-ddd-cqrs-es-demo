@@ -4,7 +4,7 @@ namespace App\Voucher\Domain\Model;
 
 use App\Common\Traits\Timestampable;
 use App\Common\Traits\UuidTrait;
-use App\Entry\Entity\Entry;
+use App\Entry\Domain\Model\Entry;
 use App\User\Domain\Model\CustomerInterface;
 use DateTimeImmutable;
 use Ramsey\Uuid\Uuid;
@@ -14,7 +14,7 @@ use Webmozart\Assert\Assert;
 final class Voucher
 {
     use UuidTrait, Timestampable;
-    private CustomerInterface $customer;
+    private CustomerInterface $member;
     private ?DateTimeImmutable $startDate;
     private ?DateTimeImmutable $endDate;
     private ?int $maximumAmount;
@@ -28,7 +28,7 @@ final class Voucher
 
     public function __construct(
         ?UuidInterface $id,
-        CustomerInterface $customer,
+        CustomerInterface $member,
         Type $type,
         ?DateTimeImmutable $startDate,
         ?DateTimeImmutable $endDate,
@@ -45,7 +45,7 @@ final class Voucher
         $this->endDate = $endDate;
         $this->maximumAmount = $maximumAmount;
         $this->entries = $entries;
-        $this->customer = $customer;
+        $this->member = $member;
         $this->active = false;
 
         $this->createdAt = new DateTimeImmutable("now");
@@ -54,7 +54,7 @@ final class Voucher
 
     public static function create(
         ?UuidInterface $id,
-        CustomerInterface $customer,
+        CustomerInterface $member,
         Type $type,
         ?DateTimeImmutable $startDate,
         ?DateTimeImmutable $endDate,
@@ -62,7 +62,7 @@ final class Voucher
     ) : self
     {
         return new self(
-            $id, $customer, $type, $startDate, $endDate, $maximumAmount
+            $id, $member, $type, $startDate, $endDate, $maximumAmount
         );
     }
 
@@ -94,5 +94,20 @@ final class Voucher
     public function close() : void
     {
         $this->closedAt = new DateTimeImmutable();
+    }
+
+    public function startDate(): ?DateTimeImmutable
+    {
+        return $this->startDate;
+    }
+
+    public function endDate(): ?DateTimeImmutable
+    {
+        return $this->endDate;
+    }
+
+    public function member(): CustomerInterface
+    {
+        return $this->member;
     }
 }

@@ -2,8 +2,12 @@ default:
   suites:
     domain_managing_entries:
       contexts:
+        - App\Core\Infrastructure\Behat\Context\Domain\ActivityContext
         - App\Core\Infrastructure\Behat\Context\Domain\EntryContext
+        - App\Core\Infrastructure\Behat\Context\Domain\ManagingVouchersContext
         - App\Core\Infrastructure\Behat\Context\Setup\MemberContext
+        - App\Core\Infrastructure\Behat\Context\Setup\AdminSecurityContext
+        - App\Core\Infrastructure\Behat\Context\Transform\UserContext
 
       filters:
         tags: "@managing_entries && @domain"

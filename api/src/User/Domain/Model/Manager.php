@@ -7,10 +7,10 @@ class Manager extends AbstractUser implements EmployeeInterface
     /** @var Instructor[] */
     protected $instructors;
 
-    public function __construct(array $instructors)
-    {
-        parent::__construct();
-
-        $this->instructors = $instructors;
-    }
+//    public function __construct(array $instructors)
+//    {
+//        parent::__construct();
+//
+//        $this->instructors = $instructors;
+//    }
 }

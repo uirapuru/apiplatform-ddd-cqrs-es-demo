@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Voucher\Infrastructure\Repository;
 
+use App\User\Domain\Model\UserInterface;
 use App\Voucher\Domain\Model\Voucher;
 use App\Voucher\Domain\Repository\VoucherRepositoryInterface;
 use Ramsey\Uuid\UuidInterface;
@@ -24,6 +25,11 @@ class InMemoryVoucherRepository implements VoucherRepositoryInterface
     public function find(UuidInterface $uuid): ?Voucher
     {
         return $this->vouchers[$uuid->toString()] ?? null;
+    }
+
+    public function findByMember(UserInterface $member) : iterable
+    {
+        return array_filter($this->vouchers, fn(Voucher $voucher): bool => $voucher->member() === $member);
     }
 
     public function size(): int

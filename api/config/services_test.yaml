@@ -12,3 +12,4 @@ services:
     App\Payment\Domain\Repository\PaymentRepositoryInterface:   '@App\Payment\Infrastructure\Repository\InMemoryPaymentRepository'
     App\User\Domain\Repository\UserRepositoryInterface:         '@App\User\Infrastructure\Repository\InMemoryUserRepository'
     App\Voucher\Domain\Repository\VoucherRepositoryInterface:   '@App\Voucher\Infrastructure\Repository\InMemoryVoucherRepository'
+    App\Entry\Domain\Repository\EntryRepositoryInterface:       '@App\Entry\Infrastructure\Repository\InMemoryEntryRepository'
