@@ -17,6 +17,7 @@ use App\Voucher\Domain\Model\Voucher;
 use App\Voucher\Domain\Repository\VoucherRepositoryInterface;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Tester\Exception\PendingException;
+use DateTimeImmutable;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Webmozart\Assert\Assert;
@@ -29,19 +30,22 @@ final class ManagingVouchersContext implements Context
     private VoucherRepositoryInterface $voucherRepository;
     private PaymentRepositoryInterface $paymentRepository;
     private MessageBusInterface $commandBus;
+    private DateTimeImmutable $now;
 
     public function __construct(
         SharedStorageInterface $sharedStorage,
         UserRepositoryInterface $userRepository,
         VoucherRepositoryInterface $voucherRepository,
         PaymentRepositoryInterface $paymentRepository,
-        MessageBusInterface $commandBus
+        MessageBusInterface $commandBus,
+        DateTimeImmutable $now
     ) {
         $this->sharedStorage = $sharedStorage;
         $this->userRepository = $userRepository;
         $this->voucherRepository = $voucherRepository;
         $this->paymentRepository = $paymentRepository;
         $this->commandBus = $commandBus;
+        $this->now = $now;
     }
 
     /**
@@ -213,5 +217,24 @@ final class ManagingVouchersContext implements Context
         $vouchers = $this->voucherRepository->findByMember($user);
 
         Assert::count($vouchers, 0);
+    }
+
+    /**
+     * @Given :user has an active :voucherType voucher
+     */
+    public function hasAnActiveVoucher(CustomerInterface $user, Type $voucherType)
+    {
+        $voucher = Voucher::create(
+            Uuid::uuid4(),
+            $user,
+            $voucherType,
+            $this->now,
+            $this->now->modify("+1 month"),
+            null
+        );
+
+        $voucher->activate();
+
+        $this->voucherRepository->add($voucher);
     }
 }

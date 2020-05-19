@@ -8,8 +8,10 @@ use App\Core\Domain\Command\EnterActivity;
 use App\Core\Infrastructure\Behat\Service\SharedStorageInterface;
 use App\Entry\Domain\Model\Entry;
 use App\Entry\Domain\Repository\EntryRepositoryInterface;
+use App\Notification\Type;
 use App\User\Domain\Model\CustomerInterface;
 use Behat\Behat\Context\Context;
+use Behat\Behat\Tester\Exception\PendingException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Webmozart\Assert\Assert;
 
@@ -56,14 +58,13 @@ final class EntryContext implements Context
     }
 
     /**
-     * @Given created entry is :type type
+     * @Given created entry is :entryType type
      */
-    public function createdEntryIsType(string $type)
+    public function createdEntryIsType(EntryType $entryType)
     {
         /** @var Entry $entry */
         $entry = $this->sharedStorage->get("last_entry");
 
-        Assert::eq($entry->type(), new EntryType($type));
+        Assert::eq($entry->type(), $entryType);
     }
-
 }

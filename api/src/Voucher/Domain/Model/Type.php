@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Voucher\Domain\Model;
 
@@ -10,12 +11,12 @@ use MyCLabs\Enum\Enum;
  * @method static ENTRIES_LIMITED()
  * @method static MONEY_LIMITED()
  */
-class Type extends Enum
+final class Type extends Enum
 {
-    const OPEN = 'open';
-    const DATE_LIMITED = 'date_limited';
-    const ENTRIES_LIMITED = 'entries_limited';
-    const MONEY_LIMITED = 'money_limited';
+    private const OPEN = 'open';
+    private const DATE_LIMITED = 'date_limited';
+    private const ENTRIES_LIMITED = 'entries_limited';
+    private const MONEY_LIMITED = 'money_limited';
 
     /**
      * @todo

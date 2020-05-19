@@ -19,8 +19,8 @@ final class UserContext implements Context
     /**
      * @Transform :user
      */
-    public function getUserByName(string $userName) : ?CustomerInterface
+    public function getUserByName(string $user) : ?CustomerInterface
     {
-        return $this->userRepository->findOneByName($userName);
+        return $this->userRepository->findOneByName($user);
     }
 }

@@ -5,9 +5,12 @@ default:
         - App\Core\Infrastructure\Behat\Context\Domain\ActivityContext
         - App\Core\Infrastructure\Behat\Context\Domain\EntryContext
         - App\Core\Infrastructure\Behat\Context\Domain\ManagingVouchersContext
+        - App\Core\Infrastructure\Behat\Context\Domain\NotificationContext
         - App\Core\Infrastructure\Behat\Context\Setup\MemberContext
         - App\Core\Infrastructure\Behat\Context\Setup\AdminSecurityContext
         - App\Core\Infrastructure\Behat\Context\Transform\UserContext
+        - App\Core\Infrastructure\Behat\Context\Transform\VoucherContext
+        - App\Core\Infrastructure\Behat\Context\Transform\EntryContext
 
       filters:
         tags: "@managing_entries && @domain"

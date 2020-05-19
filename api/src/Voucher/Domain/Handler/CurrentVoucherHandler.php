@@ -24,15 +24,14 @@ final class CurrentVoucherHandler
 
     public function __invoke(CurrentVoucher $currentVoucher) : iterable
     {
-        $now = $this->now;
-
         $member = $this->userRepository->find($currentVoucher->memberId());
 
         $result = $this->voucherRepository->findByMember($member);
 
-        $result = array_filter($result, function(Voucher $voucher) use ($now) : bool {
-            return $voucher->isActive() && $voucher->startDate() >= $now && $voucher->endDate() < $now;
-        });
+        $result = array_filter(
+            $result,
+            fn(Voucher $voucher): bool => $voucher->isActive() && $voucher->startDate() <= $this->now && $voucher->endDate() > $this->now
+        );
 
         return $result;
     }

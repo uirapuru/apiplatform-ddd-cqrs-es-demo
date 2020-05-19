@@ -38,4 +38,15 @@ final class NotificationContext implements Context
             Type::INFO()
         );
     }
+
+    /**
+     * @Given he should be notified that entry was successfully created
+     */
+    public function heShouldBeNotifiedThatEntryWasSuccessfullyCreated()
+    {
+        $this->checker->checkNotification(
+            'Entry created',
+            Type::SUCCESS()
+        );
+    }
 }

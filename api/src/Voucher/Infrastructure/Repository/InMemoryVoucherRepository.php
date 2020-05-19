@@ -29,7 +29,7 @@ class InMemoryVoucherRepository implements VoucherRepositoryInterface
 
     public function findByMember(UserInterface $member) : iterable
     {
-        return array_filter($this->vouchers, fn(Voucher $voucher): bool => $voucher->member() === $member);
+        return array_filter($this->vouchers, fn(Voucher $voucher): bool => $voucher->member()->id() === $member->id());
     }
 
     public function size(): int
